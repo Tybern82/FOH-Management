@@ -11,6 +11,7 @@ namespace FOHBackend.DoorList {
 
         public static Font DefaultTextFont = new Font(FontFamily.GenericSansSerif, 10);
         public static Font DefaultTitleFont = new Font(FontFamily.GenericSerif, 14);
+        public static Font DefaultSubTitleFont = new Font(FontFamily.GenericSerif, 12);
 
         public int marginlessWidth {
             get {
@@ -60,22 +61,13 @@ namespace FOHBackend.DoorList {
             }
         }
 
-        public int lineHeight {
-            get {
-                return bodyFont.Height;
-                // return bodyFont.FontFamily.GetLineSpacing(FontStyle.Regular);
-            }
-        }
-
-        public int headerLineHeight {
-            get {
-                return headerFont.Height;
-                // return headerFont.FontFamily.GetLineSpacing(FontStyle.Regular);
-            }
-        }
+        public int lineHeight { get { return bodyFont.Height; } }
+        public int headerLineHeight { get { return headerFont.Height; } }
+        public int subHeaderLineHeight { get { return subHeaderFont.Height; } }
 
         public Font bodyFont { get; set; } = DefaultTextFont;
-        public Font headerFont { get; set; } = DefaultTextFont;
+        public Font headerFont { get; set; } = DefaultTitleFont;
+        public Font subHeaderFont { get; set; } = DefaultSubTitleFont;
 
         /// <summary>
         /// Determines the required width to display the list of items under the current body font.
@@ -140,21 +132,37 @@ namespace FOHBackend.DoorList {
             int boxSize = bodyFont.Height * 2 / 3;
             int bufferDiff = buffer - drawBorderAt;
             
-            if (currentPage == 0) {
-                // TODO: Need to print headers
-                StringFormat fmt = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
-                fmt.Alignment = StringAlignment.Center;
-                fmt.LineAlignment = StringAlignment.Near;
-                fmt.SetMeasurableCharacterRanges(new CharacterRange[] { new CharacterRange(0, listTitle.Count()) });
-                RectangleF layoutRect = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(printableWidth, headerLineHeight));
-                float f = e.Graphics.MeasureCharacterRanges(listTitle, headerFont, layoutRect, fmt)[0].GetBounds(e.Graphics).Height;
-                int h = (int)Math.Round(f, MidpointRounding.AwayFromZero);
-                topMargin += h * 2;
-                printableHeight -= h * 2;
-                e.Graphics.DrawString(listTitle, headerFont, Brushes.Black, layoutRect, fmt);
-            }
+            string sessionTitle = (doorList.Count() > 0) ? doorList[0].eventName : "";
+            string sessionTime = (doorList.Count() > 0) ? doorList[0].sessionTime.ToString("d-MMM-yyyy h:mm tt") : "";
+
+            StringFormat fmt = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap | StringFormatFlags.FitBlackBox);
 
             Pen blackPen = new Pen(Brushes.Black, 1);
+
+            RectangleF layoutRect;
+
+            // if (currentPage == 0) {
+            fmt.Alignment = StringAlignment.Center;
+            fmt.LineAlignment = StringAlignment.Near;
+            layoutRect = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(printableWidth, headerLineHeight));
+            int h = headerLineHeight + buffer;
+            topMargin += h;
+            printableHeight -= h;
+            e.Graphics.DrawString(sessionTitle, headerFont, Brushes.Black, layoutRect, fmt);
+            layoutRect = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(printableWidth, subHeaderLineHeight));
+            e.Graphics.DrawString(sessionTime, subHeaderFont, Brushes.Black, layoutRect, fmt);
+            h = subHeaderLineHeight + buffer * 2;
+            topMargin += h;
+            printableHeight -= h;
+            // }
+
+            fmt.Alignment = StringAlignment.Near;
+            fmt.LineAlignment = StringAlignment.Far;
+            layoutRect = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(printableWidth, printableHeight));
+            e.Graphics.DrawString(listTitle, subHeaderFont, Brushes.Black, layoutRect, fmt);
+            fmt.Alignment = StringAlignment.Far;
+            e.Graphics.DrawString("Page " + (currentPage + 1), subHeaderFont, Brushes.Black, layoutRect, fmt);
+            printableHeight -= subHeaderLineHeight + buffer;
 
             int tableWidth = firstNameWidth + lastNameWidth + contactNumberWidth + ticketTypeWidth + ticketPriceWidth + promoCodeWidth + seatWidth + freeDrinkWidth + boxSize + (buffer * 11);
             if (tableWidth < printableWidth) leftMargin += (printableWidth - tableWidth) / 2;
@@ -163,11 +171,12 @@ namespace FOHBackend.DoorList {
             e.Graphics.DrawLine(blackPen, leftMargin, topMargin, leftMargin + printableWidth, topMargin);
             topMargin += buffer - drawBorderAt;
             printableHeight -= buffer;
+            
+            // TODO: Need to print table headers
 
             while ((currentRow < doorList.Count()) && (printableHeight > (lineHeight + buffer))) {
                 DoorListEntry row = doorList[currentRow];
 
-                StringFormat fmt = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap | StringFormatFlags.FitBlackBox);
                 fmt.LineAlignment = StringAlignment.Center;
 
                 e.Graphics.DrawLine(blackPen, leftMargin, topMargin-bufferDiff, leftMargin, topMargin + lineHeight + drawBorderAt);
