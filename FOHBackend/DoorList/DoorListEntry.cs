@@ -62,8 +62,13 @@ namespace FOHBackend.DoorList {
 
         public string eventName { get;  set; }
         public DateTime sessionTime { get;  set; }
-        
-        public string firstName { get;  set; }
+
+        private string _firstName;
+        public string firstName {
+            get { return _firstName; }
+            set { _firstName = value; }
+        }
+
         public string lastName { get;  set; }
         public string contactNumber { get;  set; }
 
