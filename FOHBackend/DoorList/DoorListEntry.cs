@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using LumenWorks.Framework.IO.Csv;
 
@@ -65,12 +67,21 @@ namespace FOHBackend.DoorList {
 
         private string _firstName;
         public string firstName {
-            get { return _firstName; }
+            get { return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.TextInfo.ToLower(_firstName)); }
             set { _firstName = value; }
         }
 
-        public string lastName { get;  set; }
-        public string contactNumber { get;  set; }
+        private string _lastName;
+        public string lastName {
+            get { return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.TextInfo.ToLower(_lastName)); }
+            set { _lastName = value; }
+        }
+
+        private string _contactNumber;
+        public string contactNumber {
+            get { return Helper.formatPhone(_contactNumber); }
+            set { _contactNumber = value; }
+        }
 
         public TicketType ticketType { get;  set; }
         public CurrencyAUD ticketPrice { get;  set; }
@@ -174,6 +185,33 @@ namespace FOHBackend.DoorList {
                 sList.Add(d.seat, d);
             }
             return sList.Values.ToList();
+        }
+
+        public static string formatPhone(string phone) {
+            StringBuilder str = new StringBuilder(phone.Length);
+            char[] digits = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9','+' };
+            foreach (char ch in phone) {
+                if (digits.Contains(ch)) str.Append(ch);
+            }
+            phone = str.ToString();
+            char sep = '-';
+            string mobilePatt = @"^[0][4][0-9]{8}?$";
+            string localPatt = @"^[0-9]{8}?$";
+            string stdPatt = @"^[0][0-9]{9}?$";
+            string intlMPatt = @"^[+][6][1][4][0-9]{8}?$";
+            string intlPatt = @"^[+][6][1][0-9]{9}?$";
+            if (Regex.Match(phone, mobilePatt).Value != String.Empty) {
+                return phone.Substring(0, 4) + sep + phone.Substring(4, 3) + sep + phone.Substring(7, 3);
+            } else if (Regex.Match(phone, localPatt).Value != String.Empty) {
+                return phone.Substring(0, 4) + sep + phone.Substring(4, 4);
+            } else if (Regex.Match(phone, stdPatt).Value != String.Empty) {
+                return phone.Substring(0, 2) + " " + phone.Substring(2, 4) + sep + phone.Substring(6, 4);
+            } else if (Regex.Match(phone, intlMPatt).Value != String.Empty) {
+                return "0" + phone.Substring(3, 3) + sep + phone.Substring(6, 3) + sep + phone.Substring(9, 3);
+            } else if (Regex.Match(phone, intlPatt).Value != String.Empty) {
+                return "0" + phone.Substring(3, 1) + " " + phone.Substring(4, 4) + sep + phone.Substring(8, 4); 
+            }
+            return phone;
         }
 
         public static List<DoorListEntry> loadCSV(string fname) {
