@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -55,6 +56,7 @@ namespace FOHBackend.DoorList {
         XTD         // Used to record extra seats added for single performance or for performances outside ZPAC
     }
 
+    [Serializable]
     public class DoorListEntry {
         // "Event Name","Session Date" (GMT+10:00),"Session Time",
         // "Booking First Name","Booking Last Name","Booking Telephone",
@@ -102,8 +104,7 @@ namespace FOHBackend.DoorList {
 
     public class Helper {
         public static void printDoorLists(List<DoorListEntry> list) {
-            DoorListPrinter printer = new DoorListPrinter();            
-
+            DoorListPrinter printer = new DoorListPrinter();
             printer.listTitle = "Door List by Surname";
             printer.doorList = sortByName(list);
             printer.Print();
