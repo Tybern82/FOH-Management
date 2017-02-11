@@ -196,12 +196,15 @@ namespace FOHBackend.DoorList {
             }
             phone = str.ToString();
             char sep = '-';
+            string comboPatt = @"^[0-9]{18}?$";
             string mobilePatt = @"^[0][4][0-9]{8}?$";
             string localPatt = @"^[0-9]{8}?$";
             string stdPatt = @"^[0][0-9]{9}?$";
             string intlMPatt = @"^[+][6][1][4][0-9]{8}?$";
             string intlPatt = @"^[+][6][1][0-9]{9}?$";
-            if (Regex.Match(phone, mobilePatt).Value != String.Empty) {
+            if (Regex.Match(phone, comboPatt).Value != String.Empty) {
+                return phone.Substring(0, 4) + sep + phone.Substring(4, 4) + " / " + phone.Substring(8, 4) + sep + phone.Substring(8+4, 3) + sep + phone.Substring(8+7, 3);
+            } if (Regex.Match(phone, mobilePatt).Value != String.Empty) {
                 return phone.Substring(0, 4) + sep + phone.Substring(4, 3) + sep + phone.Substring(7, 3);
             } else if (Regex.Match(phone, localPatt).Value != String.Empty) {
                 return phone.Substring(0, 4) + sep + phone.Substring(4, 4);
@@ -210,7 +213,7 @@ namespace FOHBackend.DoorList {
             } else if (Regex.Match(phone, intlMPatt).Value != String.Empty) {
                 return "0" + phone.Substring(3, 3) + sep + phone.Substring(6, 3) + sep + phone.Substring(9, 3);
             } else if (Regex.Match(phone, intlPatt).Value != String.Empty) {
-                return "0" + phone.Substring(3, 1) + " " + phone.Substring(4, 4) + sep + phone.Substring(8, 4); 
+                return "0" + phone.Substring(3, 1) + " " + phone.Substring(4, 4) + sep + phone.Substring(8, 4);
             }
             return phone;
         }

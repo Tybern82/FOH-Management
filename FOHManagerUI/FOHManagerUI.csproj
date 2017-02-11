@@ -1,0 +1,490 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.props" Condition="Exists('..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.props')" />
+  <Import Project="..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.props" Condition="Exists('..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9653920A-744C-41E5-909D-E90B6A152C37}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FOHManagerUI</RootNamespace>
+    <AssemblyName>FOHManagerUI</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>C:\SeafileLocal\Seafile\GlobalData\FOHManager\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://www.kintoshmalae.com/FOHManager/</InstallUrl>
+    <UpdateUrl>http://www.kintoshmalae.com/FOHManager/</UpdateUrl>
+    <TargetCulture>en-AU</TargetCulture>
+    <ProductName>FOH Management</ProductName>
+    <PublisherName>Jeff Sweeney</PublisherName>
+    <SuiteName>ZPAC Theatre Suite</SuiteName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>theater.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>Internet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>840BE2052CA2B5EFD1E1DF4AEEFE640977B2A62B</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>FOHManagerUI_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>FOHManagerUI.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DownloadHandler.cs" />
+    <Compile Include="MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\cef.pak">
+      <Link>cef.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\cef_100_percent.pak">
+      <Link>cef_100_percent.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\cef_200_percent.pak">
+      <Link>cef_200_percent.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\cef_extensions.pak">
+      <Link>cef_extensions.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\devtools_resources.pak">
+      <Link>devtools_resources.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\icudtl.dat">
+      <Link>icudtl.dat</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\am.pak">
+      <Link>locales\am.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ar.pak">
+      <Link>locales\ar.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\bg.pak">
+      <Link>locales\bg.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\bn.pak">
+      <Link>locales\bn.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ca.pak">
+      <Link>locales\ca.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\cs.pak">
+      <Link>locales\cs.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\da.pak">
+      <Link>locales\da.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\de.pak">
+      <Link>locales\de.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\el.pak">
+      <Link>locales\el.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\en-GB.pak">
+      <Link>locales\en-GB.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\en-US.pak">
+      <Link>locales\en-US.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\es-419.pak">
+      <Link>locales\es-419.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\es.pak">
+      <Link>locales\es.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\et.pak">
+      <Link>locales\et.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\fa.pak">
+      <Link>locales\fa.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\fi.pak">
+      <Link>locales\fi.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\fil.pak">
+      <Link>locales\fil.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\fr.pak">
+      <Link>locales\fr.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\gu.pak">
+      <Link>locales\gu.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\he.pak">
+      <Link>locales\he.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\hi.pak">
+      <Link>locales\hi.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\hr.pak">
+      <Link>locales\hr.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\hu.pak">
+      <Link>locales\hu.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\id.pak">
+      <Link>locales\id.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\it.pak">
+      <Link>locales\it.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ja.pak">
+      <Link>locales\ja.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\kn.pak">
+      <Link>locales\kn.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ko.pak">
+      <Link>locales\ko.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\lt.pak">
+      <Link>locales\lt.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\lv.pak">
+      <Link>locales\lv.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ml.pak">
+      <Link>locales\ml.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\mr.pak">
+      <Link>locales\mr.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ms.pak">
+      <Link>locales\ms.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\nb.pak">
+      <Link>locales\nb.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\nl.pak">
+      <Link>locales\nl.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\pl.pak">
+      <Link>locales\pl.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\pt-BR.pak">
+      <Link>locales\pt-BR.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\pt-PT.pak">
+      <Link>locales\pt-PT.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ro.pak">
+      <Link>locales\ro.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ru.pak">
+      <Link>locales\ru.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\sk.pak">
+      <Link>locales\sk.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\sl.pak">
+      <Link>locales\sl.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\sr.pak">
+      <Link>locales\sr.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\sv.pak">
+      <Link>locales\sv.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\sw.pak">
+      <Link>locales\sw.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\ta.pak">
+      <Link>locales\ta.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\te.pak">
+      <Link>locales\te.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\th.pak">
+      <Link>locales\th.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\tr.pak">
+      <Link>locales\tr.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\uk.pak">
+      <Link>locales\uk.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\vi.pak">
+      <Link>locales\vi.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\zh-CN.pak">
+      <Link>locales\zh-CN.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\locales\zh-TW.pak">
+      <Link>locales\zh-TW.pak</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\natives_blob.bin">
+      <Link>natives_blob.bin</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\snapshot_blob.bin">
+      <Link>snapshot_blob.bin</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="FOHManagerUI_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FOHBackend\FOHBackend.csproj">
+      <Project>{d5cc21a6-e218-4153-b0d9-0cae75af3f55}</Project>
+      <Name>FOHBackend</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Visual.C++.14.0.x86">
+      <Visible>False</Visible>
+      <ProductName>Visual C++ "14" Runtime Libraries %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\chrome_elf.dll">
+      <Link>chrome_elf.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\d3dcompiler_47.dll">
+      <Link>d3dcompiler_47.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\libcef.dll">
+      <Link>libcef.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\libEGL.dll">
+      <Link>libEGL.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\libGLESv2.dll">
+      <Link>libGLESv2.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\cef.redist.x86.3.2883.1552\CEF\x86\widevinecdmadapter.dll">
+      <Link>widevinecdmadapter.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\CefSharp.Common.55.0.0\CefSharp\x86\CefSharp.BrowserSubprocess.Core.dll">
+      <Link>CefSharp.BrowserSubprocess.Core.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FOHManager-Solution\packages\CefSharp.Common.55.0.0\CefSharp\x86\CefSharp.BrowserSubprocess.exe">
+      <Link>CefSharp.BrowserSubprocess.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="theater.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\FOHBackend\packages\cef.redist.x64.3.2883.1552\build\cef.redist.x64.targets" Condition="Exists('..\FOHBackend\packages\cef.redist.x64.3.2883.1552\build\cef.redist.x64.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\FOHBackend\packages\cef.redist.x64.3.2883.1552\build\cef.redist.x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\FOHBackend\packages\cef.redist.x64.3.2883.1552\build\cef.redist.x64.targets'))" />
+    <Error Condition="!Exists('..\FOHBackend\packages\cef.redist.x86.3.2883.1552\build\cef.redist.x86.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\FOHBackend\packages\cef.redist.x86.3.2883.1552\build\cef.redist.x86.targets'))" />
+    <Error Condition="!Exists('..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.props'))" />
+    <Error Condition="!Exists('..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.targets'))" />
+  </Target>
+  <Import Project="..\FOHBackend\packages\cef.redist.x86.3.2883.1552\build\cef.redist.x86.targets" Condition="Exists('..\FOHBackend\packages\cef.redist.x86.3.2883.1552\build\cef.redist.x86.targets')" />
+  <Import Project="..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.targets" Condition="Exists('..\FOHBackend\packages\CefSharp.Common.55.0.0\build\CefSharp.Common.targets')" />
+  <Import Project="..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.targets" Condition="Exists('..\FOHBackend\packages\CefSharp.WinForms.55.0.0\build\CefSharp.WinForms.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
