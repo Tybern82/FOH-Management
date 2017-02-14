@@ -20,9 +20,11 @@ namespace FOHManagerUI {
 
             //We're going to manually call Cef.Shutdown below, this maybe required in some complex scenarious
             CefSharpSettings.ShutdownOnExit = false;
+            var settings = new CefSettings();
+            settings.BrowserSubprocessPath = @"x86\CefSharp.BrowserSubprocess.exe";
 
             //Perform dependency check to make sure all relevant resources are in our output directory.
-            Cef.Initialize(new CefSettings(), performDependencyCheck: true, browserProcessHandler: null);
+            Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
 
             // var browser = new BrowserForm();
             var browser =new MainWindow();

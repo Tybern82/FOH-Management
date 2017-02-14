@@ -47,8 +47,8 @@ namespace FOHManagerUI {
 
         void loginUser(IWebBrowser browser) {
             // TODO: Modify to use username and password recorded in APP to allow modification
-            string uname = "lianemills@centigrowth.com";
-            string pword = "batman61";
+            string uname = FOHBackend.Settings.ActiveSettings.TryBookingUsername;
+            string pword = FOHBackend.Settings.ActiveSettings.TryBookingPassword;
 
             string cmd = "document.getElementById(\"loginForm\").elements[\"txtEmailAdd\"].value = \"" + uname + "\";";
             cmd += "document.getElementById(\"loginForm\").elements[\"txtPassword\"].value = \"" + pword + "\";";
