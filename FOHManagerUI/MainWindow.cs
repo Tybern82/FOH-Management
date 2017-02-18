@@ -34,10 +34,13 @@ namespace FOHManagerUI {
             webBrowser.Location = new System.Drawing.Point(13, 13);
             webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             webBrowser.Name = "browserDisplay";
-            webBrowser.Size = new System.Drawing.Size(1122, 475);
+            webBrowser.Size = new System.Drawing.Size(pWebBrowser.Size.Width - 13 - 13, pWebBrowser.Size.Height - 13 - 13);
+            // webBrowser.Size = new System.Drawing.Size(1122, 475);
+            webBrowser.Dock = DockStyle.Fill;
             webBrowser.TabIndex = 0;
             webBrowser.FrameLoadEnd += automaticLogin;
-            this.Controls.Add(webBrowser);
+            // this.Controls.Add(webBrowser);
+            pWebBrowser.Controls.Add(webBrowser);
         }
 
         void automaticLogin(object sender, EventArgs args) {
@@ -203,6 +206,15 @@ namespace FOHManagerUI {
                     MessageBox.Show("Error processing file");
                 }
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(Object sender, EventArgs e) {
+            AboutBox abt = new AboutBox();
+            abt.ShowDialog(this);
+        }
+
+        private void exitToolStripMenuItem_Click(Object sender, EventArgs e) {
+            bQuit_Click(sender, e);
         }
     }
 }

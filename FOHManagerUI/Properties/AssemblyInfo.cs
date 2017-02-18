@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FOH Management")]
-[assembly: AssemblyDescription("Management application for FOH")]
+[assembly: AssemblyDescription("Management application for FOH services at ZPAC Theatre.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ZPAC Theatre")]
-[assembly: AssemblyProduct("FOHManagerUI")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyProduct("FOH Management")]
+[assembly: AssemblyCopyright("Copyright © Jeff Sweeney 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
