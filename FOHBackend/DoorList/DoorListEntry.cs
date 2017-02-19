@@ -75,7 +75,14 @@ namespace FOHBackend.DoorList {
 
         private string _lastName;
         public string lastName {
-            get { return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.TextInfo.ToLower(_lastName)); }
+            get {
+                string _result = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.TextInfo.ToLower(_lastName));
+                char[] _nStr = _result.ToCharArray();
+                // APPLY Special Cases
+                if (_result.StartsWith("O'")) _nStr[2] = CultureInfo.CurrentCulture.TextInfo.ToUpper(_result[2]);
+                else if (_result.StartsWith("Mc")) _nStr[2] = CultureInfo.CurrentCulture.TextInfo.ToUpper(_result[2]);
+                return new string(_nStr);
+            }
             set { _lastName = value; }
         }
 
