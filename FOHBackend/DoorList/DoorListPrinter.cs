@@ -148,45 +148,61 @@ namespace FOHBackend.DoorList {
         }
 
         public string listTitle { get; set; }
-        public List<DoorListEntry> doorList { get; set; } = new List<DoorListEntry>();
+
+        private List<DoorListEntry> _doorList = new List<DoorListEntry>();
+        public List<DoorListEntry> doorList {
+            get { return _doorList; }
+            set {
+                _doorList = value;
+                doorListSizes = null;
+            }
+        }
 
         static string FreeDrinkText = "FD";
 
-        int firstNameWidth { get; set; }
-        int lastNameWidth { get; set; }
-        int contactNumberWidth { get; set; }
-        int ticketTypeWidth { get; set; }
-        int ticketPriceWidth { get; set; }
-        int promoCodeWidth { get; set; }
-        int seatWidth { get; set; }
-        int freeDrinkWidth { get; set; }
+        public DoorListEntrySizes doorListSizes { get; set; } = null;
+
+        // int firstNameWidth { get; set; } = 0;
+        // int lastNameWidth { get; set; } = 0;
+        // int contactNumberWidth { get; set; } = 0;
+        // int ticketTypeWidth { get; set; } = 0;
+        // int ticketPriceWidth { get; set; } = 0;
+        // int promoCodeWidth { get; set; } = 0;
+        // int seatWidth { get; set; } = 0;
+        // int freeDrinkWidth { get; set; } = 0;
 
         private int currentRow;
         private int currentPage;
 
         private int buffer = 5;
 
-        protected override void OnBeginPrint(System.Drawing.Printing.PrintEventArgs e) {
-            base.OnBeginPrint(e);
+        private void loadSizes() {
+            doorListSizes = new DoorListEntrySizes();
             EnumerationGenerator gen = new EnumerationGenerator(doorList);
-            firstNameWidth = requiredWidth(gen.firstNames, 0);
-            int minWidth = Math.Max(0, NameHeaderWidth - firstNameWidth - buffer - buffer);
-            lastNameWidth = requiredWidth(gen.lastNames, minWidth);
+            doorListSizes.firstNameWidth = requiredWidth(gen.firstNames, 0);
+            int minWidth = Math.Max(0, NameHeaderWidth - doorListSizes.firstNameWidth - buffer - buffer);
+            doorListSizes.lastNameWidth = requiredWidth(gen.lastNames, minWidth);
 
             minWidth = Math.Max(0, PhoneHeaderWidth - buffer);
-            contactNumberWidth = requiredWidth(gen.contactNumbers, minWidth);
+            doorListSizes.contactNumberWidth = requiredWidth(gen.contactNumbers, minWidth);
 
-            ticketPriceWidth = requiredWidth(gen.ticketPrices, 0);
-            minWidth = Math.Max(0, TicketHeaderWidth - buffer - buffer - ticketPriceWidth);
-            ticketTypeWidth = requiredWidth(gen.ticketTypes, minWidth);
+            doorListSizes.ticketPriceWidth = requiredWidth(gen.ticketPrices, 0);
+            minWidth = Math.Max(0, TicketHeaderWidth - buffer - buffer - doorListSizes.ticketPriceWidth);
+            doorListSizes.ticketTypeWidth = requiredWidth(gen.ticketTypes, minWidth);
 
             minWidth = Math.Max(0, PromoHeaderWidth - buffer);
-            promoCodeWidth = requiredWidth(gen.promoCodes, minWidth);
+            doorListSizes.promoCodeWidth = requiredWidth(gen.promoCodes, minWidth);
 
             minWidth = Math.Max(0, SeatHeaderWidth - buffer);
-            seatWidth = requiredWidth(gen.seats, minWidth);
+            doorListSizes.seatWidth = requiredWidth(gen.seats, minWidth);
 
-            freeDrinkWidth = TextRenderer.MeasureText(FreeDrinkText, bodyFont, new Size(printableWidth, lineHeight)).Width;
+            doorListSizes.freeDrinkWidth = TextRenderer.MeasureText(FreeDrinkText, bodyFont, new Size(printableWidth, lineHeight)).Width;
+        }
+
+        protected override void OnBeginPrint(System.Drawing.Printing.PrintEventArgs e) {
+            base.OnBeginPrint(e);
+
+            if (doorListSizes == null) loadSizes();
 
             currentRow = 0;     // reset to the first row
             currentPage = 0;    // reset to the first page
@@ -267,7 +283,7 @@ namespace FOHBackend.DoorList {
             e.Graphics.DrawString("Page " + (currentPage + 1), subHeaderFont, Brushes.Black, layoutRect, fmt);
             printableHeight -= subHeaderLineHeight + buffer;
 
-            int tableWidth = firstNameWidth + lastNameWidth + contactNumberWidth + ticketTypeWidth + ticketPriceWidth + promoCodeWidth + seatWidth + freeDrinkWidth + boxSize + (buffer * 11);
+            int tableWidth = doorListSizes.tableWidth + boxSize + (buffer * 11);
             if (tableWidth < printableWidth) leftMargin += (printableWidth - tableWidth) / 2;
             printableWidth = Math.Min(printableWidth, tableWidth);
 
@@ -280,32 +296,32 @@ namespace FOHBackend.DoorList {
             fmt.LineAlignment = StringAlignment.Center;
             e.Graphics.DrawLine(blackPen, leftMargin, topMargin - bufferDiff, leftMargin, topMargin + subHeaderLineHeight + drawBorderAt);
             fmt.Alignment = StringAlignment.Center;
-            RectangleF box = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(firstNameWidth+buffer+lastNameWidth+buffer, subHeaderLineHeight+buffer));
+            RectangleF box = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(doorListSizes.firstNameWidth+buffer+doorListSizes.lastNameWidth+buffer, subHeaderLineHeight+buffer));
             e.Graphics.DrawString(NameHeader, subHeaderFont, Brushes.Black, box, fmt);
-            float linePos = box.Left+firstNameWidth+lastNameWidth+buffer+buffer+drawBorderAt;
+            float linePos = box.Left+doorListSizes.firstNameWidth+doorListSizes.lastNameWidth+buffer+buffer+drawBorderAt;
             e.Graphics.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
 
-            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(contactNumberWidth + buffer, subHeaderLineHeight + buffer));
+            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(doorListSizes.contactNumberWidth + buffer, subHeaderLineHeight + buffer));
             e.Graphics.DrawString(PhoneHeader, subHeaderFont, Brushes.Black, box, fmt);
-            linePos = box.Left + contactNumberWidth + drawBorderAt;
+            linePos = box.Left + doorListSizes.contactNumberWidth + drawBorderAt;
             e.Graphics.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
 
-            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(ticketTypeWidth + buffer + ticketPriceWidth + buffer, subHeaderLineHeight + buffer));
+            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(doorListSizes.ticketTypeWidth + buffer + doorListSizes.ticketPriceWidth + buffer, subHeaderLineHeight + buffer));
             e.Graphics.DrawString(TicketHeader, subHeaderFont, Brushes.Black, box, fmt);
-            linePos = box.Left + ticketTypeWidth + buffer + ticketPriceWidth + drawBorderAt;
+            linePos = box.Left + doorListSizes.ticketTypeWidth + buffer + doorListSizes.ticketPriceWidth + drawBorderAt;
             e.Graphics.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
 
-            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(promoCodeWidth + buffer, subHeaderLineHeight + buffer));
+            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(doorListSizes.promoCodeWidth + buffer, subHeaderLineHeight + buffer));
             e.Graphics.DrawString(PromoHeader, subHeaderFont, Brushes.Black, box, fmt);
-            linePos = box.Left + promoCodeWidth + drawBorderAt;
+            linePos = box.Left + doorListSizes.promoCodeWidth + drawBorderAt;
             e.Graphics.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
 
-            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(seatWidth + buffer, subHeaderLineHeight + buffer));
+            box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(doorListSizes.seatWidth + buffer, subHeaderLineHeight + buffer));
             e.Graphics.DrawString(SeatHeader, subHeaderFont, Brushes.Black, box, fmt);
-            linePos = box.Left + seatWidth + drawBorderAt;
+            linePos = box.Left + doorListSizes.seatWidth + drawBorderAt;
             e.Graphics.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
 
-            linePos = linePos + bufferDiff + freeDrinkWidth + buffer + buffer + buffer + boxSize;
+            linePos = linePos + bufferDiff + doorListSizes.freeDrinkWidth + buffer + buffer + buffer + boxSize;
             e.Graphics.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
 
             e.Graphics.DrawLine(blackPen, leftMargin, topMargin + subHeaderLineHeight + drawBorderAt, leftMargin + printableWidth, topMargin + subHeaderLineHeight + drawBorderAt);
@@ -321,46 +337,46 @@ namespace FOHBackend.DoorList {
                 e.Graphics.DrawLine(blackPen, leftMargin, topMargin-bufferDiff, leftMargin, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Near;
-                box = new RectangleF(new PointF(leftMargin + buffer, topMargin), new SizeF(firstNameWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(leftMargin + buffer, topMargin), new SizeF(doorListSizes.firstNameWidth + buffer, lineHeight + buffer));
                 e.Graphics.DrawString(row.firstName, bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + firstNameWidth + drawBorderAt, topMargin-bufferDiff, box.Left + firstNameWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.firstNameWidth + drawBorderAt, topMargin-bufferDiff, box.Left + doorListSizes.firstNameWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Near;
-                box = new RectangleF(new PointF(box.Left + firstNameWidth + buffer, topMargin), new SizeF(lastNameWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(box.Left + doorListSizes.firstNameWidth + buffer, topMargin), new SizeF(doorListSizes.lastNameWidth + buffer, lineHeight + buffer));
                 e.Graphics.DrawString(row.lastName, bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + lastNameWidth + drawBorderAt, topMargin - bufferDiff, box.Left + lastNameWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.lastNameWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.lastNameWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Center;
-                box = new RectangleF(new PointF(box.Left + lastNameWidth + buffer, topMargin), new SizeF(contactNumberWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(box.Left + doorListSizes.lastNameWidth + buffer, topMargin), new SizeF(doorListSizes.contactNumberWidth + buffer, lineHeight + buffer));
                 e.Graphics.DrawString(row.contactNumber, bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + contactNumberWidth + drawBorderAt, topMargin - bufferDiff, box.Left + contactNumberWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.contactNumberWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.contactNumberWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Center;
-                box = new RectangleF(new PointF(box.Left + contactNumberWidth + buffer, topMargin), new SizeF(ticketTypeWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(box.Left + doorListSizes.contactNumberWidth + buffer, topMargin), new SizeF(doorListSizes.ticketTypeWidth + buffer, lineHeight + buffer));
                 e.Graphics.DrawString(Helper.getTicketTypeName(row.ticketType), bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + ticketTypeWidth + drawBorderAt, topMargin - bufferDiff, box.Left + ticketTypeWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.ticketTypeWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.ticketTypeWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Center;
-                box = new RectangleF(new PointF(box.Left + ticketTypeWidth+buffer, topMargin), new SizeF(ticketPriceWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(box.Left + doorListSizes.ticketTypeWidth +buffer, topMargin), new SizeF(doorListSizes.ticketPriceWidth + buffer, lineHeight + buffer));
                 e.Graphics.DrawString(row.ticketPrice, bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + ticketPriceWidth + drawBorderAt, topMargin - bufferDiff, box.Left + ticketPriceWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.ticketPriceWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.ticketPriceWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Center;
-                box = new RectangleF(new PointF(box.Left + ticketPriceWidth + buffer, topMargin), new SizeF(promoCodeWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(box.Left + doorListSizes.ticketPriceWidth + buffer, topMargin), new SizeF(doorListSizes.promoCodeWidth + buffer, lineHeight + buffer));
                 e.Graphics.DrawString(row.promoCode.promoCode, bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + promoCodeWidth + drawBorderAt, topMargin - bufferDiff, box.Left + promoCodeWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.promoCodeWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.promoCodeWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Center;
-                box = new RectangleF(new PointF(box.Left + promoCodeWidth + buffer, topMargin), new SizeF(seatWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(box.Left + doorListSizes.promoCodeWidth + buffer, topMargin), new SizeF(doorListSizes.seatWidth + buffer, lineHeight + buffer));
                 e.Graphics.DrawString(row.seat.ToString(), bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + seatWidth + drawBorderAt, topMargin - bufferDiff, box.Left + seatWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.seatWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.seatWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Center;
-                box = new RectangleF(new PointF(box.Left + seatWidth + buffer, topMargin), new SizeF(freeDrinkWidth + buffer, lineHeight + buffer));
+                box = new RectangleF(new PointF(box.Left + doorListSizes.seatWidth + buffer, topMargin), new SizeF(doorListSizes.freeDrinkWidth + buffer, lineHeight + buffer));
                 if (row.promoCode.hasFreeDrink) e.Graphics.DrawString(FreeDrinkText, bodyFont, Brushes.Black, box, fmt);
-                e.Graphics.DrawLine(blackPen, box.Left + freeDrinkWidth + drawBorderAt, topMargin - bufferDiff, box.Left + freeDrinkWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
+                e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.freeDrinkWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.freeDrinkWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
                 
-                float leftPosition = box.Left + freeDrinkWidth + buffer + buffer;
+                float leftPosition = box.Left + doorListSizes.freeDrinkWidth + buffer + buffer;
                 e.Graphics.DrawRectangle(blackPen, leftPosition, topMargin + ((lineHeight + buffer - boxSize) / 2), boxSize, boxSize);
                 e.Graphics.DrawLine(blackPen, leftPosition + buffer + boxSize, topMargin - bufferDiff, leftPosition + buffer + boxSize, topMargin + lineHeight + drawBorderAt);
 

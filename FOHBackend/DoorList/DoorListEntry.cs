@@ -56,6 +56,21 @@ namespace FOHBackend.DoorList {
         XTD         // Used to record extra seats added for single performance or for performances outside ZPAC
     }
 
+    public class DoorListEntrySizes {
+        public int firstNameWidth { get; set; } = 0;
+        public int lastNameWidth { get; set; } = 0;
+        public int contactNumberWidth { get; set; } = 0;
+        public int ticketTypeWidth { get; set; } = 0;
+        public int ticketPriceWidth { get; set; } = 0;
+        public int promoCodeWidth { get; set; } = 0;
+        public int seatWidth { get; set; } = 0;
+        public int freeDrinkWidth { get; set; } = 0;
+
+        public int tableWidth {
+            get { return firstNameWidth + lastNameWidth + contactNumberWidth + ticketTypeWidth + ticketPriceWidth + promoCodeWidth + seatWidth + freeDrinkWidth; }
+        }
+    }
+
     [Serializable]
     public class DoorListEntry {
         // "Event Name","Session Date" (GMT+10:00),"Session Time",
@@ -117,7 +132,9 @@ namespace FOHBackend.DoorList {
             printer.Print();
 
             printer.listTitle = "Door List by Seat";
+            DoorListEntrySizes sz = printer.doorListSizes;  // cache the already calculated sizes, since these won't change simply by reordering
             printer.doorList = sortBySeat(list);
+            printer.doorListSizes = sz; // restore already calculated sizes
             printer.Print();
         }
 
