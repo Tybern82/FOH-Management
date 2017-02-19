@@ -40,5 +40,6 @@ namespace FOHBackend {
 
         public string TryBookingUsername { get; set; } = "Username";
         public string TryBookingPassword { get; set; } = "Password";
+        public bool MarkOutSoldSeats { get; set; } = true;
     }
 }

@@ -197,8 +197,15 @@ namespace FOHManagerUI {
                         printer.Print();
 
                         printer.listTitle = "Door List by Seat";
+                        DoorListEntrySizes sz = printer.doorListSizes;  // cache the already calculated sizes, since these won't change simply by reordering
                         printer.doorList = Helper.sortBySeat(list);
+                        printer.doorListSizes = sz; // restore already calculated sizes
                         printer.Print();
+
+                        SeatingMapPrinter seatingMapPrinter = new SeatingMapPrinter();
+                        seatingMapPrinter.doorList = printer.doorList;
+                        seatingMapPrinter.PrinterSettings = printDialog.PrinterSettings;
+                        seatingMapPrinter.Print();
 
                         printer.doorList = new List<DoorListEntry>();
                     }

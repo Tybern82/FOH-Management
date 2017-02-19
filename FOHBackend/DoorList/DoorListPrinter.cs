@@ -7,80 +7,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FOHBackend.DoorList {
-    public class DoorListPrinter : System.Drawing.Printing.PrintDocument {
+    public class DoorListPrinter : BasePrinter {
 
-        public static Font DefaultTitleFont = new Font(FontFamily.GenericSerif, 14);
-        public static Font DefaultSubTitleFont = new Font(FontFamily.GenericSerif, 12);
-        public static Font DefaultTextFont = new Font(FontFamily.GenericSansSerif, 10);
-
-        int marginlessWidth {
-            get {
-                return (int)DefaultPageSettings.PrintableArea.Width;
-            }
+        public DoorListPrinter() {
+            OnSubHeaderFontChange += subHeaderFontChange;
         }
 
-        int marginlessHeight {
-            get {
-                return (int)DefaultPageSettings.PrintableArea.Height;
-            }
-        }
-
-        int printableWidth {
-            get {
-                return (DefaultPageSettings.Landscape ? _downPage() : _acrossPage());
-            }
-        }
-
-        int printableHeight {
-            get {
-                return (DefaultPageSettings.Landscape ? _acrossPage() : _downPage());
-            }
-        }
-
-        int topMargin {
-            get {
-                return (DefaultPageSettings.Landscape ? DefaultPageSettings.Margins.Left : DefaultPageSettings.Margins.Top);
-            }
-        }
-
-        int bottomMargin {
-            get {
-                return (DefaultPageSettings.Landscape ? DefaultPageSettings.Margins.Right : DefaultPageSettings.Margins.Bottom);
-            }
-        }
-
-        int leftMargin {
-            get {
-                return (DefaultPageSettings.Landscape ? DefaultPageSettings.Margins.Bottom : DefaultPageSettings.Margins.Left);
-            }
-        }
-
-        int rightMargin {
-            get {
-                return (DefaultPageSettings.Landscape ? DefaultPageSettings.Margins.Top : DefaultPageSettings.Margins.Right);
-            }
-        }
-
-        int lineHeight { get { return bodyFont.Height; } }
-        int headerLineHeight { get { return headerFont.Height; } }
-        int subHeaderLineHeight { get { return subHeaderFont.Height; } }
-
-        public Font bodyFont { get; set; } = DefaultTextFont;
-        public Font headerFont { get; set; } = DefaultTitleFont;
-
-        private Font _subHeaderFont = DefaultSubTitleFont;
-        public Font subHeaderFont {
-            get { return _subHeaderFont; }
-            set {
-                if (_subHeaderFont != value) {
-                    _subHeaderFont = value;
+        private void subHeaderFontChange(object sender, FontChangeEventArgs e) {
+            if (e.previousFont != e.currentFont) { 
                     // Mark the headers as needing recalculation
                     _NameHeaderWidth = -1;
                     _PhoneHeaderWidth = -1;
                     _TicketHeaderWidth = -1;
                     _PromoHeaderWidth = -1;
                     _SeatHeaderWidth = -1;
-                }
             }
         }
 
@@ -130,23 +70,6 @@ namespace FOHBackend.DoorList {
         private static readonly string PromoHeader = "Promo";
         private static readonly string SeatHeader = "Seat";
 
-        /// <summary>
-        /// Determines the required width to display the list of items under the current body font.
-        /// </summary>
-        /// <param name="g">Graphics context to use for calculating the widths</param>
-        /// <param name="items">List of items being displayed</param>
-        /// <returns>Minimum width required for this list to fully display, maximized by the printable width of the document</returns>
-        public int requiredWidth(IEnumerable<string> items, int minWidth) {
-            int width = minWidth;
-            StringFormat fmt = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.LineLimit);
-            HashSet<string> uniqueItems = new HashSet<string>(items);
-            foreach (string item in uniqueItems) {
-                Size sz = TextRenderer.MeasureText(item, bodyFont, new Size(printableWidth, lineHeight));
-                width = Math.Max(width, sz.Width);
-            }
-            return width;
-        }
-
         public string listTitle { get; set; }
 
         private List<DoorListEntry> _doorList = new List<DoorListEntry>();
@@ -173,8 +96,6 @@ namespace FOHBackend.DoorList {
 
         private int currentRow;
         private int currentPage;
-
-        private int buffer = 5;
 
         private void loadSizes() {
             doorListSizes = new DoorListEntrySizes();
@@ -290,8 +211,8 @@ namespace FOHBackend.DoorList {
             e.Graphics.DrawLine(blackPen, leftMargin, topMargin, leftMargin + printableWidth, topMargin);
             topMargin += buffer - drawBorderAt;
             printableHeight -= buffer;
-
-            // TODO: Need to print table headers
+            
+            // Print Table Headers
 
             fmt.LineAlignment = StringAlignment.Center;
             e.Graphics.DrawLine(blackPen, leftMargin, topMargin - bufferDiff, leftMargin, topMargin + subHeaderLineHeight + drawBorderAt);
@@ -389,15 +310,6 @@ namespace FOHBackend.DoorList {
 
             currentPage++;
             e.HasMorePages = (currentRow < doorList.Count);
-        }
-
-
-        private int _acrossPage() {
-            return DefaultPageSettings.PaperSize.Width - DefaultPageSettings.Margins.Left - DefaultPageSettings.Margins.Right;
-        }
-
-        private int _downPage() {
-            return DefaultPageSettings.PaperSize.Height - DefaultPageSettings.Margins.Top - DefaultPageSettings.Margins.Bottom;
         }
     }
     
