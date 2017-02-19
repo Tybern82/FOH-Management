@@ -27,8 +27,12 @@ namespace FOHBackend {
         }
 
         public static Settings loadJSONSettings(FileInfo fname) {
-            StreamReader reader = new StreamReader(fname.OpenRead());
-            _ActiveSettings = JsonConvert.DeserializeObject<Settings>(reader.ReadToEnd());
+            if (fname.Exists) {
+                StreamReader reader = new StreamReader(fname.OpenRead());
+                _ActiveSettings = JsonConvert.DeserializeObject<Settings>(reader.ReadToEnd());
+            } else {
+                return new Settings();
+            }
             return _ActiveSettings;
         }
 
