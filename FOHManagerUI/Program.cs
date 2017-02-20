@@ -12,6 +12,7 @@ namespace FOHManagerUI {
         /// </summary>
         [STAThread]
         static void Main() {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -25,11 +26,11 @@ namespace FOHManagerUI {
 
             //Perform dependency check to make sure all relevant resources are in our output directory.
             Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
-
+            
             // var browser = new BrowserForm();
             var browser =new MainWindow();
             Application.Run(browser);
-
+            
             //Shutdown before your application exists or it will hang.
             Cef.Shutdown();
         }

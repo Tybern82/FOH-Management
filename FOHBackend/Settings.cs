@@ -30,6 +30,7 @@ namespace FOHBackend {
             if (fname.Exists) {
                 StreamReader reader = new StreamReader(fname.OpenRead());
                 _ActiveSettings = JsonConvert.DeserializeObject<Settings>(reader.ReadToEnd());
+                reader.Close();
             } else {
                 return new Settings();
             }
