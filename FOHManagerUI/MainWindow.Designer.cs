@@ -33,9 +33,6 @@
             this.mbarMainMenu = new System.Windows.Forms.MenuStrip();
             this.mFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.mitmExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mHelp = new System.Windows.Forms.ToolStripMenuItem();
-            this.mitmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.mSection = new System.Windows.Forms.ToolStripMenuItem();
             this.mitmTicketing = new System.Windows.Forms.ToolStripMenuItem();
             this.mitmRostering = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,10 +46,18 @@
             this.lstVolunteerRecords = new System.Windows.Forms.ListBox();
             this.bDeleteVolunteerRecord = new System.Windows.Forms.Button();
             this.printPreviewDialog = new System.Windows.Forms.PrintPreviewDialog();
+            this.pgManual = new System.Windows.Forms.TabPage();
+            this.pManual = new System.Windows.Forms.Panel();
+            this.mitmExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.mitmAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.mitmManual = new System.Windows.Forms.ToolStripMenuItem();
+            this.mitmOfflineManual = new System.Windows.Forms.ToolStripMenuItem();
             this.mbarMainMenu.SuspendLayout();
             this.tabMainUI.SuspendLayout();
             this.pgTicketing.SuspendLayout();
             this.pgVolunteers.SuspendLayout();
+            this.pgManual.SuspendLayout();
             this.SuspendLayout();
             // 
             // bSelectExport
@@ -136,32 +141,6 @@
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 6);
             // 
-            // mitmExit
-            // 
-            this.mitmExit.Name = "mitmExit";
-            this.mitmExit.Size = new System.Drawing.Size(92, 22);
-            this.mitmExit.Text = "E&xit";
-            this.mitmExit.Click += new System.EventHandler(this.mitmExit_onClick);
-            // 
-            // mHelp
-            // 
-            this.mHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.mHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mitmAbout});
-            this.mHelp.Image = ((System.Drawing.Image)(resources.GetObject("mHelp.Image")));
-            this.mHelp.Name = "mHelp";
-            this.mHelp.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.mHelp.Size = new System.Drawing.Size(60, 20);
-            this.mHelp.Text = "&Help";
-            // 
-            // mitmAbout
-            // 
-            this.mitmAbout.Image = global::FOHManagerUI.Properties.Resources.AboutIcon;
-            this.mitmAbout.Name = "mitmAbout";
-            this.mitmAbout.Size = new System.Drawing.Size(107, 22);
-            this.mitmAbout.Text = "&About";
-            this.mitmAbout.Click += new System.EventHandler(this.mitmAbout_onClick);
-            // 
             // mSection
             // 
             this.mSection.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -201,6 +180,7 @@
             this.tabMainUI.Controls.Add(this.pgTicketing);
             this.tabMainUI.Controls.Add(this.pgRoster);
             this.tabMainUI.Controls.Add(this.pgVolunteers);
+            this.tabMainUI.Controls.Add(this.pgManual);
             this.tabMainUI.HotTrack = true;
             this.tabMainUI.Location = new System.Drawing.Point(12, 27);
             this.tabMainUI.Multiline = true;
@@ -305,6 +285,72 @@
             this.printPreviewDialog.Name = "printPreviewDialog";
             this.printPreviewDialog.Visible = false;
             // 
+            // pgManual
+            // 
+            this.pgManual.Controls.Add(this.pManual);
+            this.pgManual.Location = new System.Drawing.Point(4, 22);
+            this.pgManual.Name = "pgManual";
+            this.pgManual.Padding = new System.Windows.Forms.Padding(3);
+            this.pgManual.Size = new System.Drawing.Size(482, 466);
+            this.pgManual.TabIndex = 3;
+            this.pgManual.Text = "Online Manual";
+            this.pgManual.UseVisualStyleBackColor = true;
+            // 
+            // pManual
+            // 
+            this.pManual.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pManual.Location = new System.Drawing.Point(4, 7);
+            this.pManual.Name = "pManual";
+            this.pManual.Size = new System.Drawing.Size(472, 453);
+            this.pManual.TabIndex = 0;
+            // 
+            // mitmExit
+            // 
+            this.mitmExit.Image = global::FOHManagerUI.Properties.Resources.ExitIcon;
+            this.mitmExit.Name = "mitmExit";
+            this.mitmExit.Size = new System.Drawing.Size(92, 22);
+            this.mitmExit.Text = "E&xit";
+            this.mitmExit.Click += new System.EventHandler(this.mitmExit_onClick);
+            // 
+            // mHelp
+            // 
+            this.mHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.mHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mitmAbout,
+            this.mitmManual,
+            this.mitmOfflineManual});
+            this.mHelp.Image = ((System.Drawing.Image)(resources.GetObject("mHelp.Image")));
+            this.mHelp.Name = "mHelp";
+            this.mHelp.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.mHelp.Size = new System.Drawing.Size(60, 20);
+            this.mHelp.Text = "&Help";
+            // 
+            // mitmAbout
+            // 
+            this.mitmAbout.Image = global::FOHManagerUI.Properties.Resources.AboutIcon;
+            this.mitmAbout.Name = "mitmAbout";
+            this.mitmAbout.Size = new System.Drawing.Size(153, 22);
+            this.mitmAbout.Text = "&About";
+            this.mitmAbout.Click += new System.EventHandler(this.mitmAbout_onClick);
+            // 
+            // mitmManual
+            // 
+            this.mitmManual.Image = global::FOHManagerUI.Properties.Resources.ManualIcon;
+            this.mitmManual.Name = "mitmManual";
+            this.mitmManual.Size = new System.Drawing.Size(153, 22);
+            this.mitmManual.Text = "&Manual";
+            this.mitmManual.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
+            // 
+            // mitmOfflineManual
+            // 
+            this.mitmOfflineManual.Image = global::FOHManagerUI.Properties.Resources.ManualIcon;
+            this.mitmOfflineManual.Name = "mitmOfflineManual";
+            this.mitmOfflineManual.Size = new System.Drawing.Size(153, 22);
+            this.mitmOfflineManual.Text = "Offline Manual";
+            this.mitmOfflineManual.Click += new System.EventHandler(this.mitmOfflineManual_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -325,6 +371,7 @@
             this.tabMainUI.ResumeLayout(false);
             this.pgTicketing.ResumeLayout(false);
             this.pgVolunteers.ResumeLayout(false);
+            this.pgManual.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -357,6 +404,10 @@
         private System.Windows.Forms.ListBox lstVolunteerRecords;
         private System.Windows.Forms.Button bDeleteVolunteerRecord;
         private System.Windows.Forms.PrintPreviewDialog printPreviewDialog;
+        private System.Windows.Forms.ToolStripMenuItem mitmManual;
+        private System.Windows.Forms.TabPage pgManual;
+        private System.Windows.Forms.Panel pManual;
+        private System.Windows.Forms.ToolStripMenuItem mitmOfflineManual;
     }
 }
 

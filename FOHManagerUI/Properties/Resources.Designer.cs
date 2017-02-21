@@ -123,6 +123,16 @@ namespace FOHManagerUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ManualIcon {
+            get {
+                object obj = ResourceManager.GetObject("ManualIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ZPACLogo {
             get {
                 object obj = ResourceManager.GetObject("ZPACLogo", resourceCulture);

@@ -22,14 +22,17 @@ namespace FOHManagerUI {
         static readonly string HomePage = "http://www.trybooking.com/";
         static readonly string Dashboard = "https://portal.trybooking.com/Account/AccountDashboard.aspx";
         static readonly string ExportData = "https://portal.trybooking.com/Reports/ReportTicketHolderCSVExport.aspx";
+        static readonly string ManualPage = "https://kintoshmalae.gitbooks.io/foh-management-manual/content/";
 
         ChromiumWebBrowser webBrowser;
+        ChromiumWebBrowser manualBrowser;
         DownloadHandler downloadHandler;
 
         public MainWindow() {
             InitializeComponent();
             printDialog.Document = new DoorListPrinter();
             printDialog.Document.DocumentName = "doorList";
+
             webBrowser = new ChromiumWebBrowser(HomePage);
             downloadHandler = new DownloadHandler();
             webBrowser.DownloadHandler = downloadHandler;
@@ -46,6 +49,14 @@ namespace FOHManagerUI {
             webBrowser.FrameLoadEnd += automaticLogin;
             // this.Controls.Add(webBrowser);
             pWebBrowser.Controls.Add(webBrowser);
+
+            manualBrowser = new ChromiumWebBrowser(ManualPage);
+            manualBrowser.Dock = DockStyle.Fill;
+            manualBrowser.Location = new System.Drawing.Point(13, 13);
+            manualBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            manualBrowser.Size = new System.Drawing.Size(pgManual.Size.Width - 13 - 13, pManual.Size.Height - 13 - 13);
+            manualBrowser.Name = "manualBrowser";
+            pManual.Controls.Add(manualBrowser);
         }
 
         void automaticLogin(object sender, EventArgs args) {
@@ -301,6 +312,15 @@ namespace FOHManagerUI {
                 }
                 lstVolunteerRecords.EndUpdate();
             }
+        }
+
+        private void manualToolStripMenuItem_Click(Object sender, EventArgs e) {
+            manualBrowser.Load(ManualPage);
+            tabMainUI.SelectedTab = pgManual;
+        }
+
+        private void mitmOfflineManual_Click(Object sender, EventArgs e) {            
+            System.Diagnostics.Process.Start(System.IO.Path.Combine(Application.StartupPath, "foh-management-manual.pdf"));
         }
     }
 }
