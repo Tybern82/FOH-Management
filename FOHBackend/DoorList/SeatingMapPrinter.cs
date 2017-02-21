@@ -12,6 +12,7 @@ namespace FOHBackend.DoorList {
         public List<DoorListEntry> doorList { get; set; } = new List<DoorListEntry>();
 
         public SeatingMapPrinter() {
+            DocumentName = "seatingMap";
             DefaultPageSettings.Landscape = true;
             // Since "Toilets" and "Entrance" are written vertically, we need to make sure the height of this area
             // can accomodate them.

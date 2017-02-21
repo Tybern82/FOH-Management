@@ -10,6 +10,7 @@ namespace FOHBackend.DoorList {
     public class DoorListPrinter : BasePrinter {
 
         public DoorListPrinter() {
+            DocumentName = "doorList";
             OnSubHeaderFontChange += subHeaderFontChange;
         }
 

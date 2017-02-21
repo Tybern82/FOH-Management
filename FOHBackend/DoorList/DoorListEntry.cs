@@ -213,6 +213,7 @@ namespace FOHBackend.DoorList {
         }
 
         public static string formatPhone(string phone) {
+            if (String.IsNullOrWhiteSpace(phone)) return "";
             StringBuilder str = new StringBuilder(phone.Length);
             char[] digits = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9','+' };
             foreach (char ch in phone) {

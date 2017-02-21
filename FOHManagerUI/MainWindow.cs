@@ -10,11 +10,14 @@ using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
 using FOHBackend.DoorList;
+using FOHBackend.Roster;
 // using Newtonsoft.Json;
 // using Newtonsoft.Json.Linq;
 
 namespace FOHManagerUI {
     public partial class MainWindow : Form {
+
+        static readonly string LocalVolunteers = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LocalRecords.volunteer");
 
         static readonly string HomePage = "http://www.trybooking.com/";
         static readonly string Dashboard = "https://portal.trybooking.com/Account/AccountDashboard.aspx";
@@ -25,6 +28,8 @@ namespace FOHManagerUI {
 
         public MainWindow() {
             InitializeComponent();
+            printDialog.Document = new DoorListPrinter();
+            printDialog.Document.DocumentName = "doorList";
             webBrowser = new ChromiumWebBrowser(HomePage);
             downloadHandler = new DownloadHandler();
             webBrowser.DownloadHandler = downloadHandler;
@@ -49,7 +54,6 @@ namespace FOHManagerUI {
         }
 
         void loginUser(IWebBrowser browser) {
-            // TODO: Modify to use username and password recorded in APP to allow modification
             string uname = FOHBackend.Settings.ActiveSettings.TryBookingUsername;
             string pword = FOHBackend.Settings.ActiveSettings.TryBookingPassword;
 
@@ -189,13 +193,17 @@ namespace FOHManagerUI {
             if (openDialog.ShowDialog(this) == DialogResult.OK) {
                 try {
                     List<DoorListEntry> list = Helper.loadCSV(openDialog.FileName);
-                    if (printDialog.ShowDialog(this) == DialogResult.OK) {
-                        DoorListPrinter printer = printDialog.Document as DoorListPrinter;
 
+                    DoorListPrinter printer = new DoorListPrinter();
+                    printDialog.Document = printer;
+                    if (printDialog.ShowDialog(this) == DialogResult.OK) {
+
+                        printer.DocumentName = "doorList-bySurname";
                         printer.listTitle = "Door List by Surname";
                         printer.doorList = Helper.sortByName(list);
                         printer.Print();
 
+                        printer.DocumentName = "doorList-bySeat";
                         printer.listTitle = "Door List by Seat";
                         DoorListEntrySizes sz = printer.doorListSizes;  // cache the already calculated sizes, since these won't change simply by reordering
                         printer.doorList = Helper.sortBySeat(list);
@@ -203,11 +211,10 @@ namespace FOHManagerUI {
                         printer.Print();
 
                         SeatingMapPrinter seatingMapPrinter = new SeatingMapPrinter();
-                        seatingMapPrinter.doorList = printer.doorList;
                         seatingMapPrinter.PrinterSettings = printDialog.PrinterSettings;
+                        printDialog.Document = seatingMapPrinter;
+                        seatingMapPrinter.doorList = printer.doorList;
                         seatingMapPrinter.Print();
-
-                        printer.doorList = new List<DoorListEntry>();
                     }
                 } catch (Exception) {
                     MessageBox.Show("Error processing file");
@@ -215,13 +222,85 @@ namespace FOHManagerUI {
             }
         }
 
-        private void aboutToolStripMenuItem_Click(Object sender, EventArgs e) {
+        private void mitmAbout_onClick(Object sender, EventArgs e) {
             AboutBox abt = new AboutBox();
             abt.ShowDialog(this);
         }
 
-        private void exitToolStripMenuItem_Click(Object sender, EventArgs e) {
+        private void mitmExit_onClick(Object sender, EventArgs e) {
             bQuit_Click(sender, e);
+        }
+
+        private void mitmTicketing_onClick(Object sender, EventArgs e) {
+            tabMainUI.SelectedTab = pgTicketing;
+        }
+
+        private void mitmRostering_onClick(Object sender, EventArgs e) {
+            tabMainUI.SelectedTab = pgRoster;
+        }
+
+        private void mitmVolunteers_onClick(Object sender, EventArgs e) {
+            tabMainUI.SelectedTab = pgVolunteers;
+        }
+
+        private void bAddVolunteerRecord_Click(Object sender, EventArgs e) {
+            VolunteerRecordUI dlg = new VolunteerRecordUI();
+            if (dlg.ShowDialog() == DialogResult.OK) {
+                lstVolunteerRecords.Items.Add(dlg.baseRecord);
+                lstVolunteerRecords.Update();
+            }
+        }
+
+        private void bEditVolunteerRecord_Click(Object sender, EventArgs e) {
+            if (lstVolunteerRecords.SelectedItem == null) {
+                MessageBox.Show("Please select the record to be edited first.");
+            } else {
+                VolunteerRecord oRec = lstVolunteerRecords.SelectedItem as VolunteerRecord;
+                if (oRec == null) {
+                    MessageBox.Show("Unable to edit this record - it does not appear to be a valid record.");
+                    return;
+                }
+                VolunteerRecordUI dlg = new VolunteerRecordUI(oRec.dup());
+                if (dlg.ShowDialog() == DialogResult.OK) {
+                    lstVolunteerRecords.BeginUpdate();
+                    lstVolunteerRecords.Items.Remove(oRec);
+                    lstVolunteerRecords.Items.Add(dlg.baseRecord);
+                    lstVolunteerRecords.EndUpdate();
+                }
+            }
+        }
+
+        private void MainWindow_Load(Object sender, EventArgs e) {
+            lstVolunteerRecords.BeginUpdate();
+            List<VolunteerRecord> _items = VolunteerRecord.loadJSONList(new System.IO.FileInfo(LocalVolunteers));
+            foreach (VolunteerRecord rec in _items) lstVolunteerRecords.Items.Add(rec);
+            lstVolunteerRecords.EndUpdate();
+        }
+
+        private void MainWindow_FormClosing(Object sender, FormClosingEventArgs e) {
+            List<VolunteerRecord> _items = new List<VolunteerRecord>();
+            foreach (object i in lstVolunteerRecords.Items) {
+                VolunteerRecord _rec = i as VolunteerRecord;
+                if (_rec != null) _items.Add(_rec);
+            }
+            VolunteerRecord.storeJSONList(_items, new System.IO.FileInfo(LocalVolunteers));
+        }
+
+        private void bDeleteVolunteerRecord_Click(Object sender, EventArgs e) {
+            if (lstVolunteerRecords.SelectedItem == null) {
+                MessageBox.Show("Please select the record to be deleted first.");
+            } else {
+                VolunteerRecord oRec = lstVolunteerRecords.SelectedItem as VolunteerRecord;
+                lstVolunteerRecords.BeginUpdate();
+                if (oRec == null) {
+                    lstVolunteerRecords.Items.Remove(lstVolunteerRecords.SelectedItem);
+                    return;
+                }
+                if (MessageBox.Show(String.Format("Are you sure you want to delete {0}?", oRec), "Delete", MessageBoxButtons.OKCancel) == DialogResult.OK) {
+                    lstVolunteerRecords.Items.Remove(oRec);
+                }
+                lstVolunteerRecords.EndUpdate();
+            }
         }
     }
 }

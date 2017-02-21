@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FOHBackend.DoorList;
 using Newtonsoft.Json;
 
 namespace FOHBackend.Roster {
@@ -21,7 +22,32 @@ namespace FOHBackend.Roster {
             }
         }
 
-        public string getJSON() {
+        public static List<VolunteerRecord> loadJSONList(FileInfo fName) {
+            if (fName.Exists) {
+                StreamReader reader = new StreamReader(fName.OpenRead(), Encoding.UTF8);
+                VolunteerRecord[] _list = JsonConvert.DeserializeObject<VolunteerRecord[]>(reader.ReadToEnd());
+                reader.Close();
+                return new List<VolunteerRecord>(_list);
+            } else {
+                return new List<VolunteerRecord>();
+            }
+        }
+
+        public static void storeJSONList(List<VolunteerRecord> items, FileInfo fName) {
+            if (fName == null) return;
+            else {
+                StreamWriter writer = new StreamWriter(fName.OpenWrite(), Encoding.UTF8);
+                writer.Write(JsonConvert.SerializeObject(items.ToArray(), Formatting.Indented));
+                writer.Flush();
+                writer.Close();
+            }
+        }
+
+        public VolunteerRecord fromJSON(string text) {
+            return JsonConvert.DeserializeObject<VolunteerRecord>(text);
+        }
+
+        public string toJSON() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
@@ -33,10 +59,50 @@ namespace FOHBackend.Roster {
             if (fName == null) return;
             else { 
                 StreamWriter writer = new StreamWriter(fName.OpenWrite(), Encoding.UTF8);
-                writer.Write(getJSON());
+                writer.Write(toJSON());
                 writer.Flush();
                 writer.Close();
             }
+        }
+
+        public override String ToString() {
+            return String.Format("{0} - {1} - {2}", 
+                Name, 
+                EMail,
+                String.IsNullOrWhiteSpace(HomePhone) ? Helper.formatPhone(MobilePhone) 
+                : Helper.formatPhone(HomePhone) + (String.IsNullOrWhiteSpace(MobilePhone) ? "" : " / " + Helper.formatPhone(MobilePhone)));
+        }
+
+        public VolunteerRecord dup() {
+            VolunteerRecord _result = new VolunteerRecord();
+            copyTo(_result);
+            return _result;
+        }
+
+        public void copyTo(VolunteerRecord rec) {
+            rec.Name = Name;
+            rec.EMail = EMail;
+            rec.HomePhone = HomePhone;
+            rec.MobilePhone = MobilePhone;
+
+            rec.TicketSelling = TicketSelling;
+            rec.Kitchen = Kitchen;
+            rec.Bar = Bar;
+            rec.Maintenance = Maintenance;
+
+            rec.BlueCard = BlueCard;
+            rec.RSA = RSA;
+            rec.FHC = FHC;
+            rec.FirstAid = FirstAid;
+
+            rec.FridayMornings = FridayMornings;
+            rec.FridayNight = FridayNight;
+            rec.SaturdayMatinee = SaturdayMatinee;
+            rec.SaturdayNight = SaturdayNight;
+            rec.SundayMatinee = SundayMatinee;
+
+            rec.Notes = new string[Notes.Length];
+            Array.Copy(Notes, rec.Notes, Notes.Length);
         }
 
         // Basic Details
