@@ -77,6 +77,7 @@ namespace FOHBackend.DoorList {
         // "Booking First Name","Booking Last Name","Booking Telephone",
         // "Ticket Type","Ticket Price" (AUD),
         // Promotion[Discount] Code,
+        // Ticket Number
         // "Seat Row","Seat Number",
 
         public string eventName { get;  set; }
@@ -111,6 +112,8 @@ namespace FOHBackend.DoorList {
         public CurrencyAUD ticketPrice { get;  set; }
         
         public PromotionCode promoCode { get;  set; }
+
+        public string ticketNumber { get; set; }
 
         public Seat seat { get { return Helper.getSeat(seatRow, seatNumber); } }
         public string seatRow { get;  set; }
@@ -262,8 +265,10 @@ namespace FOHBackend.DoorList {
 
                 int promoCodeI = 8;     // reader.GetFieldIndex("Promotion[Discount] Code");
 
-                int seatRowI = 9;       // reader.GetFieldIndex("Seat Row");
-                int seatNumberI = 10;   // reader.GetFieldIndex("Seat Number");
+                int ticketNumberI = 9;
+
+                int seatRowI = 10;       // reader.GetFieldIndex("Seat Row");
+                int seatNumberI = 11;   // reader.GetFieldIndex("Seat Number");
 
                 while (reader.ReadNextRecord()) {
                     DoorListEntry entry = new DoorListEntry();
@@ -281,6 +286,8 @@ namespace FOHBackend.DoorList {
                     entry.ticketPrice = (CurrencyAUD)("$" + reader[ticketPriceI]);
 
                     entry.promoCode = new PromotionCode(reader[promoCodeI], null);    // TODO: Lookup promotion codes
+
+                    entry.ticketNumber = reader[ticketNumberI];
 
                     entry.seatRow = reader[seatRowI];
                     if (entry.seatRow == "I-") entry.seatRow = "I";     // TODO: Fix the TryBooking name....

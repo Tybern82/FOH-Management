@@ -45,7 +45,6 @@
             this.bEditVolunteerRecord = new System.Windows.Forms.Button();
             this.lstVolunteerRecords = new System.Windows.Forms.ListBox();
             this.bDeleteVolunteerRecord = new System.Windows.Forms.Button();
-            this.printPreviewDialog = new System.Windows.Forms.PrintPreviewDialog();
             this.pgManual = new System.Windows.Forms.TabPage();
             this.pManual = new System.Windows.Forms.Panel();
             this.mitmExit = new System.Windows.Forms.ToolStripMenuItem();
@@ -275,16 +274,6 @@
             this.bDeleteVolunteerRecord.UseVisualStyleBackColor = true;
             this.bDeleteVolunteerRecord.Click += new System.EventHandler(this.bDeleteVolunteerRecord_Click);
             // 
-            // printPreviewDialog
-            // 
-            this.printPreviewDialog.AutoScrollMargin = new System.Drawing.Size(0, 0);
-            this.printPreviewDialog.AutoScrollMinSize = new System.Drawing.Size(0, 0);
-            this.printPreviewDialog.ClientSize = new System.Drawing.Size(400, 300);
-            this.printPreviewDialog.Enabled = true;
-            this.printPreviewDialog.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog.Icon")));
-            this.printPreviewDialog.Name = "printPreviewDialog";
-            this.printPreviewDialog.Visible = false;
-            // 
             // pgManual
             // 
             this.pgManual.Controls.Add(this.pManual);
@@ -403,7 +392,6 @@
         private System.Windows.Forms.Button bEditVolunteerRecord;
         private System.Windows.Forms.ListBox lstVolunteerRecords;
         private System.Windows.Forms.Button bDeleteVolunteerRecord;
-        private System.Windows.Forms.PrintPreviewDialog printPreviewDialog;
         private System.Windows.Forms.ToolStripMenuItem mitmManual;
         private System.Windows.Forms.TabPage pgManual;
         private System.Windows.Forms.Panel pManual;

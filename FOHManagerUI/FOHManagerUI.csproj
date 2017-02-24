@@ -35,12 +35,12 @@
     <ProductName>FOH Management</ProductName>
     <PublisherName>Jeff Sweeney</PublisherName>
     <SuiteName>ZPAC Theatre Suite</SuiteName>
-    <MinimumRequiredVersion>1.0.1.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.1.2</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

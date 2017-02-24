@@ -165,7 +165,7 @@ namespace FOHManagerUI {
             cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_1\").checked = true;";
             cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_2\").checked = true;";
             cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_3\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_4\").checked = false;";
+            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_4\").checked = true;";
             cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_5\").checked = true;";
             cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_6\").checked = true;";
             cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_7\").checked = false;";
