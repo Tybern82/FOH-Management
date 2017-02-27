@@ -10,51 +10,6 @@ using System.Threading.Tasks;
 using LumenWorks.Framework.IO.Csv;
 
 namespace FOHBackend.DoorList {
-    public enum TicketType {
-        Adult, MemberConcession, Student
-    }
-
-    public struct PromotionCode {
-        public string promoCode;
-        public string promoName;
-        public bool hasFreeDrink;
-
-        public PromotionCode(string code, string name, bool freeDrink) {
-            this.promoCode = code;
-            this.promoName = (name == null) ? code : name;
-            this.hasFreeDrink = freeDrink;
-        }
-
-        public PromotionCode(string code, string name) : this(code, name, false) {
-            // TODO: Update to request free-drink status of unknown promo codes
-            switch (code) {
-                case "door":
-                case "Comp1":
-                case "Prepaid":
-                case "":
-                    hasFreeDrink = false;
-                    break;
-
-                default:
-                    hasFreeDrink = true;
-                    break;
-            }
-        }
-    }
-
-    public enum Seat {
-        A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14,
-        B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, B12, B13, B14,
-        C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14,
-        D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14,
-        E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14,
-        F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14,
-        G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, G11, G12, G13, G14,
-        H1, H2, H3, H4, H5, H6, H7, H8, H9, H10, H11, H12, H13, H14,
-        I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14,
-        J1, J2,
-        XTD         // Used to record extra seats added for single performance or for performances outside ZPAC
-    }
 
     public class DoorListEntrySizes {
         public int firstNameWidth { get; set; } = 0;
@@ -115,7 +70,7 @@ namespace FOHBackend.DoorList {
 
         public string ticketNumber { get; set; }
 
-        public Seat seat { get { return Helper.getSeat(seatRow, seatNumber); } }
+        public Seat seat { get { return SeatHelper.getSeat(seatRow, seatNumber); } }
         public string seatRow { get;  set; }
         public string seatNumber { get;  set; }
 
@@ -154,35 +109,6 @@ namespace FOHBackend.DoorList {
             code = new PromotionCode("Prepaid", "Prepaid");
             code = new PromotionCode("SCAGIFT", "Southern Cross Gift");
             code = new PromotionCode("GPSGIFT", "Guaranteed Plumbing Solutions");
-        }
-
-        public static Seat getSeat(string row, string number) {
-            string enumID = row + number;
-            Seat _result = Seat.XTD;
-            try {
-                _result = (Seat)Enum.Parse(typeof(Seat), "" + row + number, true);
-                if (!Enum.IsDefined(typeof(Seat), _result)) _result = Seat.XTD;
-            } catch (ArgumentException) {
-                _result = Seat.XTD;
-            }
-            return _result;
-        }
-
-        public static TicketType getTicketType(string name) {
-            switch (name) {
-                case "Member/Concession":   return TicketType.MemberConcession;
-                case "Student":             return TicketType.Student;
-                default:                    return TicketType.Adult;
-            }
-        }
-
-        public static string getTicketTypeName(TicketType t) {
-            switch (t) {
-                case TicketType.Adult: return "Adult";
-                case TicketType.Student: return "Student";
-                case TicketType.MemberConcession: return "Member/Conc";
-                default: return "";
-            }
         }
 
         public static List<DoorListEntry> sortByName(IEnumerable<DoorListEntry> lst) {
@@ -282,7 +208,7 @@ namespace FOHBackend.DoorList {
                     entry.lastName = reader[lastNameI];
                     entry.contactNumber = reader[contactNumberI];
 
-                    entry.ticketType = getTicketType(reader[ticketTypeI]);
+                    entry.ticketType = TicketTypeHelper.getTicketType(reader[ticketTypeI]);
                     entry.ticketPrice = (CurrencyAUD)("$" + reader[ticketPriceI]);
 
                     entry.promoCode = new PromotionCode(reader[promoCodeI], null);    // TODO: Lookup promotion codes

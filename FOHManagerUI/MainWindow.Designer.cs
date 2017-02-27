@@ -33,6 +33,11 @@
             this.mbarMainMenu = new System.Windows.Forms.MenuStrip();
             this.mFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mitmExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.mitmAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.mitmManual = new System.Windows.Forms.ToolStripMenuItem();
+            this.mitmOfflineManual = new System.Windows.Forms.ToolStripMenuItem();
             this.mSection = new System.Windows.Forms.ToolStripMenuItem();
             this.mitmTicketing = new System.Windows.Forms.ToolStripMenuItem();
             this.mitmRostering = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,17 +46,13 @@
             this.pgTicketing = new System.Windows.Forms.TabPage();
             this.pgRoster = new System.Windows.Forms.TabPage();
             this.pgVolunteers = new System.Windows.Forms.TabPage();
+            this.bDeleteVolunteerRecord = new System.Windows.Forms.Button();
             this.bAddVolunteerRecord = new System.Windows.Forms.Button();
             this.bEditVolunteerRecord = new System.Windows.Forms.Button();
             this.lstVolunteerRecords = new System.Windows.Forms.ListBox();
-            this.bDeleteVolunteerRecord = new System.Windows.Forms.Button();
             this.pgManual = new System.Windows.Forms.TabPage();
             this.pManual = new System.Windows.Forms.Panel();
-            this.mitmExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mHelp = new System.Windows.Forms.ToolStripMenuItem();
-            this.mitmAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.mitmManual = new System.Windows.Forms.ToolStripMenuItem();
-            this.mitmOfflineManual = new System.Windows.Forms.ToolStripMenuItem();
+            this.pgShowReport = new System.Windows.Forms.TabPage();
             this.mbarMainMenu.SuspendLayout();
             this.tabMainUI.SuspendLayout();
             this.pgTicketing.SuspendLayout();
@@ -122,6 +123,7 @@
             this.mSection});
             this.mbarMainMenu.Location = new System.Drawing.Point(0, 0);
             this.mbarMainMenu.Name = "mbarMainMenu";
+            this.mbarMainMenu.ShowItemToolTips = true;
             this.mbarMainMenu.Size = new System.Drawing.Size(514, 24);
             this.mbarMainMenu.TabIndex = 5;
             this.mbarMainMenu.Text = "menuStrip1";
@@ -139,161 +141,6 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 6);
-            // 
-            // mSection
-            // 
-            this.mSection.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mitmTicketing,
-            this.mitmRostering,
-            this.mitmVolunteers});
-            this.mSection.Name = "mSection";
-            this.mSection.Size = new System.Drawing.Size(58, 20);
-            this.mSection.Text = "&Section";
-            // 
-            // mitmTicketing
-            // 
-            this.mitmTicketing.Name = "mitmTicketing";
-            this.mitmTicketing.Size = new System.Drawing.Size(186, 22);
-            this.mitmTicketing.Text = "&Ticketing / Door Lists";
-            this.mitmTicketing.Click += new System.EventHandler(this.mitmTicketing_onClick);
-            // 
-            // mitmRostering
-            // 
-            this.mitmRostering.Name = "mitmRostering";
-            this.mitmRostering.Size = new System.Drawing.Size(186, 22);
-            this.mitmRostering.Text = "FOH &Rostering";
-            this.mitmRostering.Click += new System.EventHandler(this.mitmRostering_onClick);
-            // 
-            // mitmVolunteers
-            // 
-            this.mitmVolunteers.Name = "mitmVolunteers";
-            this.mitmVolunteers.Size = new System.Drawing.Size(186, 22);
-            this.mitmVolunteers.Text = "&Volunteer Records";
-            this.mitmVolunteers.Click += new System.EventHandler(this.mitmVolunteers_onClick);
-            // 
-            // tabMainUI
-            // 
-            this.tabMainUI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabMainUI.Controls.Add(this.pgTicketing);
-            this.tabMainUI.Controls.Add(this.pgRoster);
-            this.tabMainUI.Controls.Add(this.pgVolunteers);
-            this.tabMainUI.Controls.Add(this.pgManual);
-            this.tabMainUI.HotTrack = true;
-            this.tabMainUI.Location = new System.Drawing.Point(12, 27);
-            this.tabMainUI.Multiline = true;
-            this.tabMainUI.Name = "tabMainUI";
-            this.tabMainUI.RightToLeftLayout = true;
-            this.tabMainUI.SelectedIndex = 0;
-            this.tabMainUI.Size = new System.Drawing.Size(490, 492);
-            this.tabMainUI.TabIndex = 6;
-            // 
-            // pgTicketing
-            // 
-            this.pgTicketing.BackColor = System.Drawing.SystemColors.Control;
-            this.pgTicketing.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pgTicketing.Controls.Add(this.pWebBrowser);
-            this.pgTicketing.Controls.Add(this.bSelectExport);
-            this.pgTicketing.Controls.Add(this.bPrint);
-            this.pgTicketing.Controls.Add(this.bExport);
-            this.pgTicketing.Location = new System.Drawing.Point(4, 22);
-            this.pgTicketing.Name = "pgTicketing";
-            this.pgTicketing.Padding = new System.Windows.Forms.Padding(3);
-            this.pgTicketing.Size = new System.Drawing.Size(482, 466);
-            this.pgTicketing.TabIndex = 0;
-            this.pgTicketing.Text = "Ticketing / Door Lists";
-            // 
-            // pgRoster
-            // 
-            this.pgRoster.BackColor = System.Drawing.SystemColors.Control;
-            this.pgRoster.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pgRoster.Location = new System.Drawing.Point(4, 22);
-            this.pgRoster.Name = "pgRoster";
-            this.pgRoster.Padding = new System.Windows.Forms.Padding(3);
-            this.pgRoster.Size = new System.Drawing.Size(482, 466);
-            this.pgRoster.TabIndex = 1;
-            this.pgRoster.Text = "FOH Rostering";
-            // 
-            // pgVolunteers
-            // 
-            this.pgVolunteers.BackColor = System.Drawing.SystemColors.Control;
-            this.pgVolunteers.Controls.Add(this.bDeleteVolunteerRecord);
-            this.pgVolunteers.Controls.Add(this.bAddVolunteerRecord);
-            this.pgVolunteers.Controls.Add(this.bEditVolunteerRecord);
-            this.pgVolunteers.Controls.Add(this.lstVolunteerRecords);
-            this.pgVolunteers.Location = new System.Drawing.Point(4, 22);
-            this.pgVolunteers.Name = "pgVolunteers";
-            this.pgVolunteers.Padding = new System.Windows.Forms.Padding(3);
-            this.pgVolunteers.Size = new System.Drawing.Size(482, 466);
-            this.pgVolunteers.TabIndex = 2;
-            this.pgVolunteers.Text = "Volunteer Records";
-            // 
-            // bAddVolunteerRecord
-            // 
-            this.bAddVolunteerRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bAddVolunteerRecord.Location = new System.Drawing.Point(170, 437);
-            this.bAddVolunteerRecord.Name = "bAddVolunteerRecord";
-            this.bAddVolunteerRecord.Size = new System.Drawing.Size(98, 23);
-            this.bAddVolunteerRecord.TabIndex = 2;
-            this.bAddVolunteerRecord.Text = "Add Volunteer";
-            this.bAddVolunteerRecord.UseVisualStyleBackColor = true;
-            this.bAddVolunteerRecord.Click += new System.EventHandler(this.bAddVolunteerRecord_Click);
-            // 
-            // bEditVolunteerRecord
-            // 
-            this.bEditVolunteerRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bEditVolunteerRecord.Location = new System.Drawing.Point(274, 437);
-            this.bEditVolunteerRecord.Name = "bEditVolunteerRecord";
-            this.bEditVolunteerRecord.Size = new System.Drawing.Size(98, 23);
-            this.bEditVolunteerRecord.TabIndex = 1;
-            this.bEditVolunteerRecord.Text = "Edit Volunteer";
-            this.bEditVolunteerRecord.UseVisualStyleBackColor = true;
-            this.bEditVolunteerRecord.Click += new System.EventHandler(this.bEditVolunteerRecord_Click);
-            // 
-            // lstVolunteerRecords
-            // 
-            this.lstVolunteerRecords.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstVolunteerRecords.FormattingEnabled = true;
-            this.lstVolunteerRecords.Location = new System.Drawing.Point(7, 7);
-            this.lstVolunteerRecords.Name = "lstVolunteerRecords";
-            this.lstVolunteerRecords.Size = new System.Drawing.Size(469, 420);
-            this.lstVolunteerRecords.Sorted = true;
-            this.lstVolunteerRecords.TabIndex = 0;
-            // 
-            // bDeleteVolunteerRecord
-            // 
-            this.bDeleteVolunteerRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bDeleteVolunteerRecord.Location = new System.Drawing.Point(378, 437);
-            this.bDeleteVolunteerRecord.Name = "bDeleteVolunteerRecord";
-            this.bDeleteVolunteerRecord.Size = new System.Drawing.Size(98, 23);
-            this.bDeleteVolunteerRecord.TabIndex = 3;
-            this.bDeleteVolunteerRecord.Text = "Delete Volunteer";
-            this.bDeleteVolunteerRecord.UseVisualStyleBackColor = true;
-            this.bDeleteVolunteerRecord.Click += new System.EventHandler(this.bDeleteVolunteerRecord_Click);
-            // 
-            // pgManual
-            // 
-            this.pgManual.Controls.Add(this.pManual);
-            this.pgManual.Location = new System.Drawing.Point(4, 22);
-            this.pgManual.Name = "pgManual";
-            this.pgManual.Padding = new System.Windows.Forms.Padding(3);
-            this.pgManual.Size = new System.Drawing.Size(482, 466);
-            this.pgManual.TabIndex = 3;
-            this.pgManual.Text = "Online Manual";
-            this.pgManual.UseVisualStyleBackColor = true;
-            // 
-            // pManual
-            // 
-            this.pManual.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pManual.Location = new System.Drawing.Point(4, 7);
-            this.pManual.Name = "pManual";
-            this.pManual.Size = new System.Drawing.Size(472, 453);
-            this.pManual.TabIndex = 0;
             // 
             // mitmExit
             // 
@@ -339,6 +186,178 @@
             this.mitmOfflineManual.Size = new System.Drawing.Size(153, 22);
             this.mitmOfflineManual.Text = "Offline Manual";
             this.mitmOfflineManual.Click += new System.EventHandler(this.mitmOfflineManual_Click);
+            // 
+            // mSection
+            // 
+            this.mSection.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mitmTicketing,
+            this.mitmRostering,
+            this.mitmVolunteers});
+            this.mSection.Name = "mSection";
+            this.mSection.Size = new System.Drawing.Size(58, 20);
+            this.mSection.Text = "&Section";
+            // 
+            // mitmTicketing
+            // 
+            this.mitmTicketing.Name = "mitmTicketing";
+            this.mitmTicketing.Size = new System.Drawing.Size(186, 22);
+            this.mitmTicketing.Text = "&Ticketing / Door Lists";
+            this.mitmTicketing.Click += new System.EventHandler(this.mitmTicketing_onClick);
+            // 
+            // mitmRostering
+            // 
+            this.mitmRostering.Name = "mitmRostering";
+            this.mitmRostering.Size = new System.Drawing.Size(186, 22);
+            this.mitmRostering.Text = "FOH &Rostering";
+            this.mitmRostering.Click += new System.EventHandler(this.mitmRostering_onClick);
+            // 
+            // mitmVolunteers
+            // 
+            this.mitmVolunteers.Name = "mitmVolunteers";
+            this.mitmVolunteers.Size = new System.Drawing.Size(186, 22);
+            this.mitmVolunteers.Text = "&Volunteer Records";
+            this.mitmVolunteers.Click += new System.EventHandler(this.mitmVolunteers_onClick);
+            // 
+            // tabMainUI
+            // 
+            this.tabMainUI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabMainUI.Controls.Add(this.pgTicketing);
+            this.tabMainUI.Controls.Add(this.pgRoster);
+            this.tabMainUI.Controls.Add(this.pgVolunteers);
+            this.tabMainUI.Controls.Add(this.pgShowReport);
+            this.tabMainUI.Controls.Add(this.pgManual);
+            this.tabMainUI.HotTrack = true;
+            this.tabMainUI.Location = new System.Drawing.Point(12, 27);
+            this.tabMainUI.Multiline = true;
+            this.tabMainUI.Name = "tabMainUI";
+            this.tabMainUI.RightToLeftLayout = true;
+            this.tabMainUI.SelectedIndex = 0;
+            this.tabMainUI.ShowToolTips = true;
+            this.tabMainUI.Size = new System.Drawing.Size(490, 492);
+            this.tabMainUI.TabIndex = 6;
+            // 
+            // pgTicketing
+            // 
+            this.pgTicketing.BackColor = System.Drawing.SystemColors.Control;
+            this.pgTicketing.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pgTicketing.Controls.Add(this.pWebBrowser);
+            this.pgTicketing.Controls.Add(this.bSelectExport);
+            this.pgTicketing.Controls.Add(this.bPrint);
+            this.pgTicketing.Controls.Add(this.bExport);
+            this.pgTicketing.Location = new System.Drawing.Point(4, 22);
+            this.pgTicketing.Name = "pgTicketing";
+            this.pgTicketing.Padding = new System.Windows.Forms.Padding(3);
+            this.pgTicketing.Size = new System.Drawing.Size(482, 466);
+            this.pgTicketing.TabIndex = 0;
+            this.pgTicketing.Text = "Ticketing / Door Lists";
+            this.pgTicketing.ToolTipText = "Access TryBooking online ticketing system.";
+            // 
+            // pgRoster
+            // 
+            this.pgRoster.BackColor = System.Drawing.SystemColors.Control;
+            this.pgRoster.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pgRoster.Location = new System.Drawing.Point(4, 22);
+            this.pgRoster.Name = "pgRoster";
+            this.pgRoster.Padding = new System.Windows.Forms.Padding(3);
+            this.pgRoster.Size = new System.Drawing.Size(482, 466);
+            this.pgRoster.TabIndex = 1;
+            this.pgRoster.Text = "FOH Rostering";
+            this.pgRoster.ToolTipText = "View and modify rosters for upcoming and past shows.";
+            // 
+            // pgVolunteers
+            // 
+            this.pgVolunteers.BackColor = System.Drawing.SystemColors.Control;
+            this.pgVolunteers.Controls.Add(this.bDeleteVolunteerRecord);
+            this.pgVolunteers.Controls.Add(this.bAddVolunteerRecord);
+            this.pgVolunteers.Controls.Add(this.bEditVolunteerRecord);
+            this.pgVolunteers.Controls.Add(this.lstVolunteerRecords);
+            this.pgVolunteers.Location = new System.Drawing.Point(4, 22);
+            this.pgVolunteers.Name = "pgVolunteers";
+            this.pgVolunteers.Padding = new System.Windows.Forms.Padding(3);
+            this.pgVolunteers.Size = new System.Drawing.Size(482, 466);
+            this.pgVolunteers.TabIndex = 2;
+            this.pgVolunteers.Text = "Volunteer Records";
+            this.pgVolunteers.ToolTipText = "Add and update details for volunteers.";
+            // 
+            // bDeleteVolunteerRecord
+            // 
+            this.bDeleteVolunteerRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bDeleteVolunteerRecord.Location = new System.Drawing.Point(378, 437);
+            this.bDeleteVolunteerRecord.Name = "bDeleteVolunteerRecord";
+            this.bDeleteVolunteerRecord.Size = new System.Drawing.Size(98, 23);
+            this.bDeleteVolunteerRecord.TabIndex = 3;
+            this.bDeleteVolunteerRecord.Text = "Delete Volunteer";
+            this.bDeleteVolunteerRecord.UseVisualStyleBackColor = true;
+            this.bDeleteVolunteerRecord.Click += new System.EventHandler(this.bDeleteVolunteerRecord_Click);
+            // 
+            // bAddVolunteerRecord
+            // 
+            this.bAddVolunteerRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bAddVolunteerRecord.Location = new System.Drawing.Point(170, 437);
+            this.bAddVolunteerRecord.Name = "bAddVolunteerRecord";
+            this.bAddVolunteerRecord.Size = new System.Drawing.Size(98, 23);
+            this.bAddVolunteerRecord.TabIndex = 2;
+            this.bAddVolunteerRecord.Text = "Add Volunteer";
+            this.bAddVolunteerRecord.UseVisualStyleBackColor = true;
+            this.bAddVolunteerRecord.Click += new System.EventHandler(this.bAddVolunteerRecord_Click);
+            // 
+            // bEditVolunteerRecord
+            // 
+            this.bEditVolunteerRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bEditVolunteerRecord.Location = new System.Drawing.Point(274, 437);
+            this.bEditVolunteerRecord.Name = "bEditVolunteerRecord";
+            this.bEditVolunteerRecord.Size = new System.Drawing.Size(98, 23);
+            this.bEditVolunteerRecord.TabIndex = 1;
+            this.bEditVolunteerRecord.Text = "Edit Volunteer";
+            this.bEditVolunteerRecord.UseVisualStyleBackColor = true;
+            this.bEditVolunteerRecord.Click += new System.EventHandler(this.bEditVolunteerRecord_Click);
+            // 
+            // lstVolunteerRecords
+            // 
+            this.lstVolunteerRecords.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstVolunteerRecords.FormattingEnabled = true;
+            this.lstVolunteerRecords.Location = new System.Drawing.Point(7, 7);
+            this.lstVolunteerRecords.Name = "lstVolunteerRecords";
+            this.lstVolunteerRecords.Size = new System.Drawing.Size(469, 420);
+            this.lstVolunteerRecords.Sorted = true;
+            this.lstVolunteerRecords.TabIndex = 0;
+            // 
+            // pgManual
+            // 
+            this.pgManual.Controls.Add(this.pManual);
+            this.pgManual.Location = new System.Drawing.Point(4, 22);
+            this.pgManual.Name = "pgManual";
+            this.pgManual.Padding = new System.Windows.Forms.Padding(3);
+            this.pgManual.Size = new System.Drawing.Size(482, 466);
+            this.pgManual.TabIndex = 3;
+            this.pgManual.Text = "Online Manual";
+            this.pgManual.ToolTipText = "Access to the online version of the manual for this application.";
+            this.pgManual.UseVisualStyleBackColor = true;
+            // 
+            // pManual
+            // 
+            this.pManual.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pManual.Location = new System.Drawing.Point(4, 7);
+            this.pManual.Name = "pManual";
+            this.pManual.Size = new System.Drawing.Size(472, 453);
+            this.pManual.TabIndex = 0;
+            // 
+            // pgShowReport
+            // 
+            this.pgShowReport.BackColor = System.Drawing.SystemColors.Control;
+            this.pgShowReport.Location = new System.Drawing.Point(4, 22);
+            this.pgShowReport.Name = "pgShowReport";
+            this.pgShowReport.Padding = new System.Windows.Forms.Padding(3);
+            this.pgShowReport.Size = new System.Drawing.Size(482, 466);
+            this.pgShowReport.TabIndex = 4;
+            this.pgShowReport.Text = "Show Report";
+            this.pgShowReport.ToolTipText = "End-of-show reporting on attendance and sales.";
             // 
             // MainWindow
             // 
@@ -396,6 +415,7 @@
         private System.Windows.Forms.TabPage pgManual;
         private System.Windows.Forms.Panel pManual;
         private System.Windows.Forms.ToolStripMenuItem mitmOfflineManual;
+        private System.Windows.Forms.TabPage pgShowReport;
     }
 }
 

@@ -275,7 +275,7 @@ namespace FOHBackend.DoorList {
 
                 fmt.Alignment = StringAlignment.Center;
                 box = new RectangleF(new PointF(box.Left + doorListSizes.contactNumberWidth + buffer, topMargin), new SizeF(doorListSizes.ticketTypeWidth + buffer, lineHeight + buffer));
-                e.Graphics.DrawString(Helper.getTicketTypeName(row.ticketType), bodyFont, Brushes.Black, box, fmt);
+                e.Graphics.DrawString(TicketTypeHelper.getTicketTypeName(row.ticketType), bodyFont, Brushes.Black, box, fmt);
                 e.Graphics.DrawLine(blackPen, box.Left + doorListSizes.ticketTypeWidth + drawBorderAt, topMargin - bufferDiff, box.Left + doorListSizes.ticketTypeWidth + drawBorderAt, topMargin + lineHeight + drawBorderAt);
 
                 fmt.Alignment = StringAlignment.Center;
@@ -324,7 +324,7 @@ namespace FOHBackend.DoorList {
         public IEnumerable<string> firstNames { get { foreach (DoorListEntry d in doorList) yield return d.firstName; } }
         public IEnumerable<string> lastNames { get { foreach (DoorListEntry d in doorList) yield return d.lastName; } }
         public IEnumerable<string> contactNumbers { get { foreach (DoorListEntry d in doorList) yield return d.contactNumber; } }
-        public IEnumerable<string> ticketTypes { get { foreach (DoorListEntry d in doorList) yield return Helper.getTicketTypeName(d.ticketType); } }
+        public IEnumerable<string> ticketTypes { get { foreach (DoorListEntry d in doorList) yield return TicketTypeHelper.getTicketTypeName(d.ticketType); } }
         public IEnumerable<string> ticketPrices { get { foreach (DoorListEntry d in doorList) yield return d.ticketPrice.ToString(); } }
         public IEnumerable<string> promoCodes { get { foreach (DoorListEntry d in doorList) yield return d.promoCode.promoCode; } } // TODO: promoName?
         public IEnumerable<string> seats { get { foreach (DoorListEntry d in doorList) yield return d.seat.ToString(); } }
