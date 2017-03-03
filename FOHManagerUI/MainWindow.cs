@@ -68,11 +68,7 @@ namespace FOHManagerUI {
             string uname = FOHBackend.Settings.ActiveSettings.TryBookingUsername;
             string pword = FOHBackend.Settings.ActiveSettings.TryBookingPassword;
 
-                  // TODO: Load via autologin.js {0}=uname, {1}=pword
-            string cmd = "document.getElementById(\"loginForm\").elements[\"txtEmailAdd\"].value = \"" + uname + "\";";
-            cmd += "document.getElementById(\"loginForm\").elements[\"txtPassword\"].value = \"" + pword + "\";";
-            cmd += "document.getElementById(\"loginForm\").submit();";
-            browser.EvaluateScriptAsync(cmd);
+            browser.EvaluateScriptAsync(FOHBackend.ui.Scripts.getAutologinCommand(uname, pword));
         }
 
         void exportData() {
@@ -120,58 +116,9 @@ namespace FOHManagerUI {
             webBrowser.EvaluateScriptAsync(setExportSettings());
             allowExport(true);
         }
-
+        
         string setExportSettings() {
-            // Basic settings
-            string cmd = "window['chkAllBooks'].SetChecked(true);";
-            cmd = "window['ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblIncludeHeader'].SetChecked(false);";
-            cmd += "window['ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblGroupDuplicatedDetails'].SetChecked(false);";
-            cmd += "window['chkExcludeBOFQuickSale'].SetChecked(false);";
-            cmd += "window['chkIncludeRefundedTickets'].SetChecked(false);";
-            // Event Details
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_0\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_1\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_2\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_3\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_4\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_5\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_6\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_7\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_8\").checked = false;";
-            // Booking Details 
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_0\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_1\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_2\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_3\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_4\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_5\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_6\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_7\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_8\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_9\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_10\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_11\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_12\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_13\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_14\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_15\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_16\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_17\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_18\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_19\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblBookingDetails_20\").checked = false;";
-
-            // Ticket Details
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_0\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_1\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_2\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_3\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_4\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_5\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_6\").checked = true;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_7\").checked = false;";
-            cmd += "document.getElementById(\"ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblTicketDetails_8\").checked = false;";
-            return cmd;
+            return FOHBackend.ui.Scripts.getExportSettingsCommand();
         }
 
         private void bSelectExport_Click(Object sender, EventArgs e) {
@@ -179,14 +126,8 @@ namespace FOHManagerUI {
         }
 
         private void bExport_Click(Object sender, EventArgs e) {
-            string cmd = "";
-            cmd += "(function() {";
-            cmd += setExportSettings();
-            cmd += "window['btnExport'].DoClick();";
-            cmd += "return 0;";
-            cmd += "})();";
             downloadHandler.OnDownloadUpdatedFired += onDownload;
-            webBrowser.ExecuteScriptAsync(cmd);
+            webBrowser.ExecuteScriptAsync(FOHBackend.ui.Scripts.getExportCommand());
         }
 
         void onDownload(object sender, DownloadItem item) {
