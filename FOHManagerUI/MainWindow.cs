@@ -68,6 +68,7 @@ namespace FOHManagerUI {
             string uname = FOHBackend.Settings.ActiveSettings.TryBookingUsername;
             string pword = FOHBackend.Settings.ActiveSettings.TryBookingPassword;
 
+                  // TODO: Load via autologin.js {0}=uname, {1}=pword
             string cmd = "document.getElementById(\"loginForm\").elements[\"txtEmailAdd\"].value = \"" + uname + "\";";
             cmd += "document.getElementById(\"loginForm\").elements[\"txtPassword\"].value = \"" + pword + "\";";
             cmd += "document.getElementById(\"loginForm\").submit();";
