@@ -322,5 +322,120 @@ namespace FOHManagerUI {
         private void mitmOfflineManual_Click(Object sender, EventArgs e) {            
             System.Diagnostics.Process.Start(System.IO.Path.Combine(Application.StartupPath, "foh-management-manual.pdf"));
         }
+
+        #region Show Reporting Table Updates
+
+        private void nCashDoorSales_ValueChanged(Object sender, EventArgs e) {
+            txtTotalDoorSalesUpdate();
+            txtCashTotalUpdate();
+        }
+
+        private void nEFTDoorSales_ValueChanged(Object sender, EventArgs e) {
+            txtTotalDoorSalesUpdate();
+            txtEFTTotalUpdate();
+        }
+
+        private void nCashMainBar_ValueChanged(Object sender, EventArgs e) {
+            txtTotalMainBarUpdate();
+            txtCashTotalUpdate();
+        }
+
+        private void nEFTMainBar_ValueChanged(Object sender, EventArgs e) {
+            txtTotalMainBarUpdate();
+            txtEFTTotalUpdate();
+        }
+
+        private void nCashWineBar_ValueChanged(Object sender, EventArgs e) {
+            txtTotalWineBarUpdate();
+            txtCashTotalUpdate();
+        }
+
+        private void nEFTWineBar_ValueChanged(Object sender, EventArgs e) {
+            txtTotalWineBarUpdate();
+            txtEFTTotalUpdate();
+        }
+
+        private void nCashMember_ValueChanged(Object sender, EventArgs e) {
+            txtTotalMemberUpdate();
+            txtCashTotalUpdate();
+        }
+
+        private void nEFTMember_ValueChanged(Object sender, EventArgs e) {
+            txtTotalMemberUpdate();
+            txtEFTTotalUpdate();
+        }
+
+        private void nCashKitchen_ValueChanged(Object sender, EventArgs e) {
+            txtTotalKitchenUpdate();
+            txtCashTotalUpdate();
+        }
+
+        private void nEFTKitchen_ValueChanged(Object sender, EventArgs e) {
+            txtTotalKitchenUpdate();
+            txtEFTTotalUpdate();
+        }
+
+        private void nCashProgram_ValueChanged(Object sender, EventArgs e) {
+            txtTotalProgramUpdate();
+            txtCashTotalUpdate();
+        }
+
+        private void nEFTProgram_ValueChanged(Object sender, EventArgs e) {
+            txtTotalProgramUpdate();
+            txtEFTTotalUpdate();
+        }
+
+        private void txtTotalDoorSalesUpdate() {
+            txtTotalDoorSales.Text = (nCashDoorSales.Value + nEFTDoorSales.Value).ToString("C");
+        }
+
+        private void txtTotalMainBarUpdate() {
+            txtTotalMainBar.Text = (nCashMainBar.Value + nEFTMainBar.Value).ToString("C");
+        }
+
+        private void txtTotalWineBarUpdate() {
+            txtTotalWineBar.Text = (nCashWineBar.Value + nEFTWineBar.Value).ToString("C");
+        }
+
+        private void txtTotalMemberUpdate() {
+            txtTotalMember.Text = (nCashMember.Value + nEFTMember.Value).ToString("C");
+        }
+
+        private void txtTotalKitchenUpdate() {
+            txtTotalKitchen.Text = (nCashKitchen.Value + nEFTKitchen.Value).ToString("C");
+        }
+
+        private void txtTotalProgramUpdate() {
+            txtTotalProgram.Text = (nCashProgram.Value + nEFTProgram.Value).ToString("C");
+        }
+
+        private decimal getCashSales() {
+            return (nCashDoorSales.Value + nCashMainBar.Value + nCashWineBar.Value+nCashMember.Value+nCashKitchen.Value+nCashProgram.Value);
+        }
+
+        private decimal getEFTSales() {
+            return (nEFTDoorSales.Value + nEFTMainBar.Value + nEFTWineBar.Value+nEFTMember.Value+nEFTKitchen.Value+nEFTProgram.Value);
+        }
+
+        private void txtCashTotalUpdate() {
+            txtCashTotal.Text = getCashSales().ToString("C");
+        }
+
+        private void txtEFTTotalUpdate() {
+            txtEFTTotal.Text = getEFTSales().ToString("C");
+        }
+
+        private void txtGrandTotalUpdate() {
+            txtGrandTotal.Text = (getCashSales() + getEFTSales()).ToString("C");
+        }
+
+        private void txtCashTotal_TextChanged(Object sender, EventArgs e) {
+            txtGrandTotalUpdate();
+        }
+
+        private void txtEFTTotal_TextChanged(Object sender, EventArgs e) {
+            txtGrandTotalUpdate();
+        }
+        #endregion
     }
 }
