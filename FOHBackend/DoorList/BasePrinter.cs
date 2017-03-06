@@ -121,7 +121,7 @@ namespace FOHBackend.DoorList {
             StringFormat fmt = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.LineLimit);
             HashSet<string> uniqueItems = new HashSet<string>(items);
             foreach (string item in uniqueItems) {
-                Size sz = TextRenderer.MeasureText(item, bodyFont, new Size(printableWidth, lineHeight));
+                Size sz = TextRenderer.MeasureText(this.PrinterSettings.CreateMeasurementGraphics(), item, bodyFont, new Size(printableWidth, lineHeight));
                 width = Math.Max(width, sz.Width);
             }
             return width;

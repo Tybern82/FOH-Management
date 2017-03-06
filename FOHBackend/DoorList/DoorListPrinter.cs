@@ -28,7 +28,7 @@ namespace FOHBackend.DoorList {
         private int _NameHeaderWidth = -1;
         private int NameHeaderWidth {
             get {
-                if (_NameHeaderWidth == -1) _NameHeaderWidth = TextRenderer.MeasureText(NameHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
+                if (_NameHeaderWidth == -1) _NameHeaderWidth = TextRenderer.MeasureText(this.PrinterSettings.CreateMeasurementGraphics(), NameHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
                 return _NameHeaderWidth;
             }
         }
@@ -36,7 +36,7 @@ namespace FOHBackend.DoorList {
         private int _PhoneHeaderWidth = -1;
         private int PhoneHeaderWidth {
             get {
-                if (_PhoneHeaderWidth == -1) _PhoneHeaderWidth = TextRenderer.MeasureText(PhoneHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
+                if (_PhoneHeaderWidth == -1) _PhoneHeaderWidth = TextRenderer.MeasureText(this.PrinterSettings.CreateMeasurementGraphics(), PhoneHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
                 return _PhoneHeaderWidth;
             }
         }
@@ -44,7 +44,7 @@ namespace FOHBackend.DoorList {
         private int _TicketHeaderWidth = -1;
         private int TicketHeaderWidth {
             get {
-                if (_TicketHeaderWidth == -1) _TicketHeaderWidth = TextRenderer.MeasureText(TicketHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
+                if (_TicketHeaderWidth == -1) _TicketHeaderWidth = TextRenderer.MeasureText(this.PrinterSettings.CreateMeasurementGraphics(), TicketHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
                 return _TicketHeaderWidth;
             }
         }
@@ -52,7 +52,7 @@ namespace FOHBackend.DoorList {
         private int _PromoHeaderWidth = -1;
         private int PromoHeaderWidth {
             get {
-                if (_PromoHeaderWidth == -1) _PromoHeaderWidth = TextRenderer.MeasureText(PromoHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
+                if (_PromoHeaderWidth == -1) _PromoHeaderWidth = TextRenderer.MeasureText(this.PrinterSettings.CreateMeasurementGraphics(), PromoHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
                 return _PromoHeaderWidth;
             }
         }
@@ -60,7 +60,7 @@ namespace FOHBackend.DoorList {
         private int _SeatHeaderWidth = -1;
         private int SeatHeaderWidth {
             get {
-                if (_SeatHeaderWidth == -1) _SeatHeaderWidth = TextRenderer.MeasureText(SeatHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
+                if (_SeatHeaderWidth == -1) _SeatHeaderWidth = TextRenderer.MeasureText(this.PrinterSettings.CreateMeasurementGraphics(), SeatHeader, subHeaderFont, new Size(printableWidth, subHeaderLineHeight)).Width;
                 return _SeatHeaderWidth;
             }
         }
