@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FOH Management")]
-[assembly: AssemblyDescription("Management application for FOH services at ZPAC Theatre.")]
+[assembly: AssemblyTitle("FOHServer")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jeff Sweeney")]
-[assembly: AssemblyProduct("FOH Management")]
-[assembly: AssemblyCopyright("Copyright © Jeff Sweeney 2017")]
+[assembly: AssemblyProduct("FOHServer")]
+[assembly: AssemblyCopyright("Copyright ©  2017 Jeff Sweeney")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9653920a-744c-41e5-909d-e90b6a152c37")]
+[assembly: Guid("55015d0b-12e7-4a4d-b173-b1a55ee48fc3")]
 
 // Version information for an assembly consists of the following four values:
 //

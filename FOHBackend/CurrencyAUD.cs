@@ -91,5 +91,9 @@ namespace FOHBackend {
         public static implicit operator long(CurrencyAUD c) {
             return c._cents;
         }
+
+        public static implicit operator CurrencyAUD(decimal d) {
+            return new CurrencyAUD((long)Math.Round(d * 100));
+        }
     }
 }

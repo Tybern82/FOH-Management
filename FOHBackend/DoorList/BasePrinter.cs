@@ -120,9 +120,12 @@ namespace FOHBackend.DoorList {
             int width = minWidth;
             StringFormat fmt = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.LineLimit);
             HashSet<string> uniqueItems = new HashSet<string>(items);
+            Graphics g = PrinterSettings.CreateMeasurementGraphics();
             foreach (string item in uniqueItems) {
-                Size sz = TextRenderer.MeasureText(this.PrinterSettings.CreateMeasurementGraphics(), item, bodyFont, new Size(printableWidth, lineHeight));
-                width = Math.Max(width, sz.Width);
+                SizeF sz = g.MeasureString(item, bodyFont, new Size(printableWidth, lineHeight));
+                width = Math.Max(width, (int)Math.Round(sz.Width, MidpointRounding.AwayFromZero));
+                // Size sz = TextRenderer.MeasureText(g, item, bodyFont, new Size(printableWidth, lineHeight));
+                // width = Math.Max(width, sz.Width);
             }
             return width;
         }

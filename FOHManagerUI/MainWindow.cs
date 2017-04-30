@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
 using FOHBackend.DoorList;
+using FOHBackend.Reports;
 using FOHBackend.Roster;
 // using Newtonsoft.Json;
 // using Newtonsoft.Json.Linq;
@@ -30,6 +32,7 @@ namespace FOHManagerUI {
 
         public MainWindow() {
             InitializeComponent();
+
             printDialog.Document = new DoorListPrinter();
             printDialog.Document.DocumentName = "doorList";
 
@@ -57,6 +60,9 @@ namespace FOHManagerUI {
             manualBrowser.Size = new System.Drawing.Size(pgManual.Size.Width - 13 - 13, pManual.Size.Height - 13 - 13);
             manualBrowser.Name = "manualBrowser";
             pManual.Controls.Add(manualBrowser);
+
+            pgMail.SetInvisible();
+            pgShowReport.SetInvisible();
         }
 
         void automaticLogin(object sender, EventArgs args) {
@@ -108,7 +114,7 @@ namespace FOHManagerUI {
         */
 
         void allowExport(bool enabled) {
-            this.Invoke((Action)(() => { bExport.Enabled = enabled; }));
+            this.Invoke((Action)(() => { bExport.Enabled = enabled; bExportOnly.Enabled = enabled; }));
         }
 
         void automaticExport(object sender, EventArgs args) {
@@ -116,7 +122,7 @@ namespace FOHManagerUI {
             webBrowser.EvaluateScriptAsync(setExportSettings());
             allowExport(true);
         }
-        
+
         string setExportSettings() {
             return FOHBackend.ui.Scripts.getExportSettingsCommand();
         }
@@ -126,8 +132,25 @@ namespace FOHManagerUI {
         }
 
         private void bExport_Click(Object sender, EventArgs e) {
+            doPrintAuto = true;
+            downloadHandler.OnDownloadUpdatedFired += onDownload;
+            downloadHandler.OnBeforeDownloadFired += onStartDownload;
+            webBrowser.ExecuteScriptAsync(FOHBackend.ui.Scripts.getExportCommand());
+        }
+
+        private void bExportOnly_Click(Object sender, EventArgs e) {
+            doPrintAuto = false;
             downloadHandler.OnDownloadUpdatedFired += onDownload;
             webBrowser.ExecuteScriptAsync(FOHBackend.ui.Scripts.getExportCommand());
+        }
+
+        private FileInfo currentDownload;
+        public static bool doPrintAuto = false;
+
+        void onStartDownload(object sender, DownloadItem item) {
+            string fName = Path.GetTempFileName();
+            item.SuggestedFileName = fName;
+            currentDownload = new FileInfo(fName);
         }
 
         void onDownload(object sender, DownloadItem item) {
@@ -135,6 +158,10 @@ namespace FOHManagerUI {
                 allowExport(false);
                 webBrowser.Load(Dashboard);
                 downloadHandler.OnDownloadUpdatedFired -= onDownload;
+                downloadHandler.OnBeforeDownloadFired -= onStartDownload;
+                if (doPrintAuto && currentDownload != null && currentDownload.Exists) {
+                    this.Invoke((Action)(() => { doPrint(); }));
+                }
             }
         }
 
@@ -142,36 +169,47 @@ namespace FOHManagerUI {
             Application.Exit();
         }
 
+        void doPrint() {
+            onPrint(currentDownload.FullName);
+            currentDownload.Delete();
+            currentDownload = null;
+        }
+
+        private void onPrint(string fName) {
+            try {
+                List<DoorListEntry> list = Helper.loadCSV(fName);
+
+                DoorListPrinter printer = new DoorListPrinter();
+                printDialog.Document = printer;
+                if (printDialog.ShowDialog(this) == DialogResult.OK) {
+
+                    printer.DocumentName = "doorList-bySurname";
+                    printer.listTitle = "Door List by Surname";
+                    printer.doorList = Helper.sortByName(list);
+                    printer.Print();
+
+                    printer.DocumentName = "doorList-bySeat";
+                    printer.listTitle = "Door List by Seat";
+                    DoorListEntrySizes sz = printer.doorListSizes;  // cache the already calculated sizes, since these won't change simply by reordering
+                    printer.doorList = Helper.sortBySeat(list);
+                    printer.doorListSizes = sz; // restore already calculated sizes
+                    printer.Print();
+
+                    SeatingMapPrinter seatingMapPrinter = new SeatingMapPrinter();
+                    seatingMapPrinter.PrinterSettings = printDialog.PrinterSettings;
+                    printDialog.Document = seatingMapPrinter;
+                    seatingMapPrinter.doorList = printer.doorList;
+                    seatingMapPrinter.Print();
+                }
+            } catch (Exception e) {
+                // System.Console.WriteLine(e);
+                MessageBox.Show("Error processing file");
+            }
+        }
+
         private void bPrint_Click(Object sender, EventArgs e) {
             if (openDialog.ShowDialog(this) == DialogResult.OK) {
-                try {
-                    List<DoorListEntry> list = Helper.loadCSV(openDialog.FileName);
-
-                    DoorListPrinter printer = new DoorListPrinter();
-                    printDialog.Document = printer;
-                    if (printDialog.ShowDialog(this) == DialogResult.OK) {
-
-                        printer.DocumentName = "doorList-bySurname";
-                        printer.listTitle = "Door List by Surname";
-                        printer.doorList = Helper.sortByName(list);
-                        printer.Print();
-
-                        printer.DocumentName = "doorList-bySeat";
-                        printer.listTitle = "Door List by Seat";
-                        DoorListEntrySizes sz = printer.doorListSizes;  // cache the already calculated sizes, since these won't change simply by reordering
-                        printer.doorList = Helper.sortBySeat(list);
-                        printer.doorListSizes = sz; // restore already calculated sizes
-                        printer.Print();
-
-                        SeatingMapPrinter seatingMapPrinter = new SeatingMapPrinter();
-                        seatingMapPrinter.PrinterSettings = printDialog.PrinterSettings;
-                        printDialog.Document = seatingMapPrinter;
-                        seatingMapPrinter.doorList = printer.doorList;
-                        seatingMapPrinter.Print();
-                    }
-                } catch (Exception) {
-                    MessageBox.Show("Error processing file");
-                }
+                onPrint(openDialog.FileName);
             }
         }
 
@@ -261,114 +299,120 @@ namespace FOHManagerUI {
             tabMainUI.SelectedTab = pgManual;
         }
 
-        private void mitmOfflineManual_Click(Object sender, EventArgs e) {            
+        private void mitmOfflineManual_Click(Object sender, EventArgs e) {
             System.Diagnostics.Process.Start(System.IO.Path.Combine(Application.StartupPath, "foh-management-manual.pdf"));
         }
 
         #region Show Reporting Table Updates
 
+        ShowReport showReport = new ShowReport();
+
         private void nCashDoorSales_ValueChanged(Object sender, EventArgs e) {
+            showReport.CashDoorSales = nCashDoorSales.Value;
             txtTotalDoorSalesUpdate();
             txtCashTotalUpdate();
         }
 
         private void nEFTDoorSales_ValueChanged(Object sender, EventArgs e) {
+            showReport.EFTDoorSales = nEFTDoorSales.Value;
             txtTotalDoorSalesUpdate();
             txtEFTTotalUpdate();
         }
 
         private void nCashMainBar_ValueChanged(Object sender, EventArgs e) {
+            showReport.CashMainBar = nCashMainBar.Value;
             txtTotalMainBarUpdate();
             txtCashTotalUpdate();
         }
 
         private void nEFTMainBar_ValueChanged(Object sender, EventArgs e) {
+            showReport.EFTMainBar = nEFTMainBar.Value;
             txtTotalMainBarUpdate();
             txtEFTTotalUpdate();
         }
 
         private void nCashWineBar_ValueChanged(Object sender, EventArgs e) {
+            showReport.CashWineBar = nCashWineBar.Value;
             txtTotalWineBarUpdate();
             txtCashTotalUpdate();
         }
 
         private void nEFTWineBar_ValueChanged(Object sender, EventArgs e) {
+            showReport.EFTWineBar = nEFTWineBar.Value;
             txtTotalWineBarUpdate();
             txtEFTTotalUpdate();
         }
 
         private void nCashMember_ValueChanged(Object sender, EventArgs e) {
+            showReport.CashMembership = nCashMainBar.Value;
             txtTotalMemberUpdate();
             txtCashTotalUpdate();
         }
 
         private void nEFTMember_ValueChanged(Object sender, EventArgs e) {
+            showReport.EFTMembership = nEFTMember.Value;
             txtTotalMemberUpdate();
             txtEFTTotalUpdate();
         }
 
         private void nCashKitchen_ValueChanged(Object sender, EventArgs e) {
+            showReport.CashKitchen = nCashKitchen.Value;
             txtTotalKitchenUpdate();
             txtCashTotalUpdate();
         }
 
         private void nEFTKitchen_ValueChanged(Object sender, EventArgs e) {
+            showReport.EFTKitchen = nEFTKitchen.Value;
             txtTotalKitchenUpdate();
             txtEFTTotalUpdate();
         }
 
         private void nCashProgram_ValueChanged(Object sender, EventArgs e) {
+            showReport.CashPrograms = nCashProgram.Value;
             txtTotalProgramUpdate();
             txtCashTotalUpdate();
         }
 
         private void nEFTProgram_ValueChanged(Object sender, EventArgs e) {
+            showReport.EFTPrograms = nEFTProgram.Value;
             txtTotalProgramUpdate();
             txtEFTTotalUpdate();
         }
 
         private void txtTotalDoorSalesUpdate() {
-            txtTotalDoorSales.Text = (nCashDoorSales.Value + nEFTDoorSales.Value).ToString("C");
+            txtTotalDoorSales.Text = showReport.TotalDoorSales;
         }
 
         private void txtTotalMainBarUpdate() {
-            txtTotalMainBar.Text = (nCashMainBar.Value + nEFTMainBar.Value).ToString("C");
+            txtTotalMainBar.Text = showReport.TotalMainBar;
         }
 
         private void txtTotalWineBarUpdate() {
-            txtTotalWineBar.Text = (nCashWineBar.Value + nEFTWineBar.Value).ToString("C");
+            txtTotalWineBar.Text = showReport.TotalWineBar;
         }
 
         private void txtTotalMemberUpdate() {
-            txtTotalMember.Text = (nCashMember.Value + nEFTMember.Value).ToString("C");
+            txtTotalMember.Text = showReport.TotalMembership;
         }
 
         private void txtTotalKitchenUpdate() {
-            txtTotalKitchen.Text = (nCashKitchen.Value + nEFTKitchen.Value).ToString("C");
+            txtTotalKitchen.Text = showReport.TotalKitchen;
         }
 
         private void txtTotalProgramUpdate() {
-            txtTotalProgram.Text = (nCashProgram.Value + nEFTProgram.Value).ToString("C");
-        }
-
-        private decimal getCashSales() {
-            return (nCashDoorSales.Value + nCashMainBar.Value + nCashWineBar.Value+nCashMember.Value+nCashKitchen.Value+nCashProgram.Value);
-        }
-
-        private decimal getEFTSales() {
-            return (nEFTDoorSales.Value + nEFTMainBar.Value + nEFTWineBar.Value+nEFTMember.Value+nEFTKitchen.Value+nEFTProgram.Value);
+            txtTotalProgram.Text = showReport.TotalPrograms;
         }
 
         private void txtCashTotalUpdate() {
-            txtCashTotal.Text = getCashSales().ToString("C");
+            txtCashTotal.Text = showReport.CashTotal;
         }
 
         private void txtEFTTotalUpdate() {
-            txtEFTTotal.Text = getEFTSales().ToString("C");
+            txtEFTTotal.Text = showReport.EFTTotal;
         }
 
         private void txtGrandTotalUpdate() {
-            txtGrandTotal.Text = (getCashSales() + getEFTSales()).ToString("C");
+            txtGrandTotal.Text = showReport.GrandTotal;
         }
 
         private void txtCashTotal_TextChanged(Object sender, EventArgs e) {

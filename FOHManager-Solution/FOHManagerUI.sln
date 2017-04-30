@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FOHManagerUI", "..\FOHManag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FOHBackend", "..\FOHBackend\FOHBackend.csproj", "{D5CC21A6-E218-4153-B0D9-0CAE75AF3F55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FOHServer", "..\FOHServer\FOHServer.csproj", "{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -34,6 +36,14 @@ Global
 		{D5CC21A6-E218-4153-B0D9-0CAE75AF3F55}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5CC21A6-E218-4153-B0D9-0CAE75AF3F55}.Release|x86.ActiveCfg = Release|Any CPU
 		{D5CC21A6-E218-4153-B0D9-0CAE75AF3F55}.Release|x86.Build.0 = Release|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Debug|x86.Build.0 = Debug|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Release|x86.ActiveCfg = Release|Any CPU
+		{55015D0B-12E7-4A4D-B173-B1A55EE48FC3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

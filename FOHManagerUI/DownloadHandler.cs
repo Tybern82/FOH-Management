@@ -16,7 +16,8 @@ namespace FOHManagerUI {
 
             if (!callback.IsDisposed) {
                 using (callback) {
-                    callback.Continue(downloadItem.SuggestedFileName, showDialog: true);
+                    // System.Console.WriteLine("File: <" + downloadItem.SuggestedFileName + ">");
+                    callback.Continue(downloadItem.SuggestedFileName, showDialog: !MainWindow.doPrintAuto);
                 }
             }
         }
