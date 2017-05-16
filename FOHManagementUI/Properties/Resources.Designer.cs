@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FOHBackend.Properties {
+namespace FOHManagerUI.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace FOHBackend.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FOHBackend.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FOHManagerUI.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,45 +61,82 @@ namespace FOHBackend.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to document.getElementById(&quot;loginForm&quot;).elements[&quot;txtEmailAdd&quot;].value = &quot;{0}&quot;;            
-        ///document.getElementById(&quot;loginForm&quot;).elements[&quot;txtPassword&quot;].value = &quot;{1}&quot;;            
-        ///document.getElementById(&quot;loginForm&quot;).submit();
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string autologin {
+        public static System.Drawing.Bitmap AboutIcon {
             get {
-                return ResourceManager.GetString("autologin", resourceCulture);
+                object obj = ResourceManager.GetObject("AboutIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (function () {{
-        ///        {0}
-        ///        window[&apos;btnExport&apos;].DoClick();
-        ///        return 0;
-        ///}})();.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string exportCommand {
+        public static System.Drawing.Bitmap Add {
             get {
-                return ResourceManager.GetString("exportCommand", resourceCulture);
+                object obj = ResourceManager.GetObject("Add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // Basic Settings
-        ///window[&apos;chkAllBooks&apos;].SetChecked(true);
-        ///window[&apos;ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblIncludeHeader&apos;].SetChecked(false);
-        ///window[&apos;ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblGroupDuplicatedDetails&apos;].SetChecked(false);
-        ///window[&apos;chkExcludeBOFQuickSale&apos;].SetChecked(false);
-        ///window[&apos;chkIncludeRefundedTickets&apos;].SetChecked(false);
-        ///
-        ///// Event Details            
-        ///document.getElementById(&quot;ctl00_ContentPlaceHolder1_CallbackPanelLabel_cblEventDetails_0&quot;).checked = true;
-        ///document.ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string exportSettings {
+        public static System.Drawing.Bitmap Delete {
             get {
-                return ResourceManager.GetString("exportSettings", resourceCulture);
+                object obj = ResourceManager.GetObject("Delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Edit {
+            get {
+                object obj = ResourceManager.GetObject("Edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ExitIcon {
+            get {
+                object obj = ResourceManager.GetObject("ExitIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpIcon {
+            get {
+                object obj = ResourceManager.GetObject("HelpIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ManualIcon {
+            get {
+                object obj = ResourceManager.GetObject("ManualIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ZPACLogo {
+            get {
+                object obj = ResourceManager.GetObject("ZPACLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

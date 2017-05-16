@@ -127,7 +127,14 @@ namespace FOHBackend.DoorList {
                 if (i.Count() == 1) {
                     _result.Add(i[0]);
                 } else if (i.Count() > 1) {
-                    foreach (DoorListEntry d in sortBySeat(i)) _result.Add(d);
+                    if (i[0].seat == Seat.XTD)
+                    {
+                        foreach (DoorListEntry d in i) _result.Add(d);
+                    }
+                    else
+                    {
+                        foreach (DoorListEntry d in sortBySeat(i)) _result.Add(d);
+                    }
                 }
             }
             return _result;
@@ -135,10 +142,15 @@ namespace FOHBackend.DoorList {
 
         public static List<DoorListEntry> sortBySeat(IEnumerable<DoorListEntry> lst) {
             SortedList<Seat, DoorListEntry> sList = new SortedList<Seat, DoorListEntry>(lst.Count());
+            List<DoorListEntry> xList = new List<DoorListEntry>();
             foreach (DoorListEntry d in lst) {
-                sList.Add(d.seat, d);
+                if (d.seat == Seat.XTD) xList.Add(d);
+                else sList.Add(d.seat, d);
             }
-            return sList.Values.ToList();
+            List<DoorListEntry> _result = new List<DoorListEntry>(sList.Count + xList.Count);
+            _result.AddRange(sList.Values);
+            _result.AddRange(sortByName(xList));
+            return _result;
         }
 
         public static string formatPhone(string phone) {

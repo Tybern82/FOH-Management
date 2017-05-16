@@ -11,6 +11,6 @@ namespace FOHBackend.Mail {
 
     public class IMAP4Client {
 
-        public event CMessageReceived onMessageReceive;
+        // public event CMessageReceived onMessageReceive;
     }
 }
