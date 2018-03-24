@@ -32,6 +32,7 @@
             this.pWebBrowser = new System.Windows.Forms.Panel();
             this.mbarMainMenu = new System.Windows.Forms.MenuStrip();
             this.mFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mitmSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mitmExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,13 +92,9 @@
             this.lProduction = new System.Windows.Forms.Label();
             this.cmbProduction = new System.Windows.Forms.ComboBox();
             this.pgMail = new System.Windows.Forms.TabPage();
-            this.tMail = new System.Windows.Forms.DataGridView();
-            this.cDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSubject = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pgManual = new System.Windows.Forms.TabPage();
             this.pManual = new System.Windows.Forms.Panel();
-            this.mitmSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.pMail = new System.Windows.Forms.Panel();
             this.mbarMainMenu.SuspendLayout();
             this.tabMainUI.SuspendLayout();
             this.pgTicketing.SuspendLayout();
@@ -120,7 +117,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nCashDoorSales)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nEFTDoorSales)).BeginInit();
             this.pgMail.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tMail)).BeginInit();
             this.pgManual.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -202,16 +198,23 @@
             this.mFile.Size = new System.Drawing.Size(37, 20);
             this.mFile.Text = "&File";
             // 
+            // mitmSettings
+            // 
+            this.mitmSettings.Name = "mitmSettings";
+            this.mitmSettings.Size = new System.Drawing.Size(116, 22);
+            this.mitmSettings.Text = "Settings";
+            this.mitmSettings.Click += new System.EventHandler(this.mitmSettings_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
             // 
             // mitmExit
             // 
             this.mitmExit.Image = global::FOHManagerUI.Properties.Resources.ExitIcon;
             this.mitmExit.Name = "mitmExit";
-            this.mitmExit.Size = new System.Drawing.Size(152, 22);
+            this.mitmExit.Size = new System.Drawing.Size(116, 22);
             this.mitmExit.Text = "E&xit";
             this.mitmExit.Click += new System.EventHandler(this.mitmExit_onClick);
             // 
@@ -1006,54 +1009,12 @@
             // pgMail
             // 
             this.pgMail.BackColor = System.Drawing.SystemColors.Control;
-            this.pgMail.Controls.Add(this.tMail);
+            this.pgMail.Controls.Add(this.pMail);
             this.pgMail.Location = new System.Drawing.Point(4, 22);
             this.pgMail.Name = "pgMail";
             this.pgMail.Size = new System.Drawing.Size(527, 466);
             this.pgMail.TabIndex = 5;
             this.pgMail.Text = "Mail";
-            // 
-            // tMail
-            // 
-            this.tMail.AllowUserToOrderColumns = true;
-            this.tMail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tMail.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.tMail.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-            this.tMail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tMail.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cDate,
-            this.cFrom,
-            this.cSubject});
-            this.tMail.Location = new System.Drawing.Point(4, 39);
-            this.tMail.Name = "tMail";
-            this.tMail.ReadOnly = true;
-            this.tMail.RowHeadersVisible = false;
-            this.tMail.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.tMail.Size = new System.Drawing.Size(520, 424);
-            this.tMail.TabIndex = 0;
-            // 
-            // cDate
-            // 
-            this.cDate.HeaderText = "Date Sent";
-            this.cDate.Name = "cDate";
-            this.cDate.ReadOnly = true;
-            this.cDate.Width = 80;
-            // 
-            // cFrom
-            // 
-            this.cFrom.HeaderText = "Sent From";
-            this.cFrom.Name = "cFrom";
-            this.cFrom.ReadOnly = true;
-            this.cFrom.Width = 80;
-            // 
-            // cSubject
-            // 
-            this.cSubject.HeaderText = "Subject";
-            this.cSubject.Name = "cSubject";
-            this.cSubject.ReadOnly = true;
-            this.cSubject.Width = 68;
             // 
             // pgManual
             // 
@@ -1074,15 +1035,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pManual.Location = new System.Drawing.Point(4, 7);
             this.pManual.Name = "pManual";
-            this.pManual.Size = new System.Drawing.Size(472, 435);
+            this.pManual.Size = new System.Drawing.Size(517, 453);
             this.pManual.TabIndex = 0;
             // 
-            // mitmSettings
+            // pMail
             // 
-            this.mitmSettings.Name = "mitmSettings";
-            this.mitmSettings.Size = new System.Drawing.Size(152, 22);
-            this.mitmSettings.Text = "Settings";
-            this.mitmSettings.Click += new System.EventHandler(this.mitmSettings_Click);
+            this.pMail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pMail.Location = new System.Drawing.Point(4, 7);
+            this.pMail.Name = "pMail";
+            this.pMail.Size = new System.Drawing.Size(520, 456);
+            this.pMail.TabIndex = 1;
             // 
             // MainWindow
             // 
@@ -1123,7 +1087,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nCashDoorSales)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nEFTDoorSales)).EndInit();
             this.pgMail.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.tMail)).EndInit();
             this.pgManual.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1162,10 +1125,6 @@
         private System.Windows.Forms.ToolStripMenuItem mitmOfflineManual;
         private System.Windows.Forms.TabPage pgShowReport;
         private System.Windows.Forms.TabPage pgMail;
-        private System.Windows.Forms.DataGridView tMail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFrom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSubject;
         private System.Windows.Forms.Label lDoorSales;
         private System.Windows.Forms.Label lblTotal;
         private System.Windows.Forms.Label lblEFT;
@@ -1206,6 +1165,7 @@
         private System.Windows.Forms.Label lblPrograms;
         private System.Windows.Forms.Button bExportOnly;
         private System.Windows.Forms.ToolStripMenuItem mitmSettings;
+        private System.Windows.Forms.Panel pMail;
     }
 }
 

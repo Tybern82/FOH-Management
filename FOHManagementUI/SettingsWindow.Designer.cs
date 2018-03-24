@@ -191,7 +191,7 @@
             this.txtSMTPServer.Name = "txtSMTPServer";
             this.txtSMTPServer.Size = new System.Drawing.Size(350, 20);
             this.txtSMTPServer.TabIndex = 8;
-            this.txtSMTPServer.Text = "smtp.gmail.com";
+            this.txtSMTPServer.Text = "mail.zpactheatre.com";
             this.txtSMTPServer.TextChanged += new System.EventHandler(this.txtSMTPServer_TextChanged);
             // 
             // lblSMTPServer
@@ -286,7 +286,7 @@
             this.txtSenderEMail.Name = "txtSenderEMail";
             this.txtSenderEMail.Size = new System.Drawing.Size(350, 20);
             this.txtSenderEMail.TabIndex = 2;
-            this.txtSenderEMail.Text = "eMail";
+            this.txtSenderEMail.Text = "front-of-house@zpactheatre.com";
             this.txtSenderEMail.TextChanged += new System.EventHandler(this.txtSenderEMail_TextChanged);
             // 
             // lblSenderEMail

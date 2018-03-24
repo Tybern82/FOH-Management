@@ -15,6 +15,10 @@ namespace FOHBackend.ui {
             return String.Format(Properties.Resources.autologin, uname, pword);
         }
 
+        public static string getAutologinEMailCommand(string uname, string pword) {
+            return String.Format(Properties.Resources.autologinemail, uname, pword);
+        }
+
         public static string getExportCommand() {
             return String.Format(Properties.Resources.exportCommand, getExportSettingsCommand());
         }

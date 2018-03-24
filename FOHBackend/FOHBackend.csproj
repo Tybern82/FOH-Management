@@ -132,6 +132,7 @@
     <Compile Include="ui\Scripts.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ui\autologinemail.js" />
     <Content Include="ui\autologin.js" />
     <Content Include="ui\exportCommand.js" />
     <Content Include="ui\exportSettings.js" />

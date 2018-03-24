@@ -19,7 +19,7 @@ namespace FOHBackend.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -69,6 +69,18 @@ namespace FOHBackend.Properties {
         public static string autologin {
             get {
                 return ResourceManager.GetString("autologin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to document.getElementById(&quot;login_form&quot;).elements[&quot;user&quot;].value = &quot;{0}&quot;;            
+        ///document.getElementById(&quot;login_form&quot;).elements[&quot;pass&quot;].value = &quot;{1}&quot;;            
+        ///document.getElementById(&quot;login_form&quot;).submit();
+        ///.
+        /// </summary>
+        public static string autologinemail {
+            get {
+                return ResourceManager.GetString("autologinemail", resourceCulture);
             }
         }
         

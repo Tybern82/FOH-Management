@@ -25,16 +25,19 @@ namespace FOHManagerUI {
         static readonly string Dashboard = "https://portal.trybooking.com/Account/AccountDashboard.aspx";
         static readonly string ExportData = "https://portal.trybooking.com/Reports/ReportTicketHolderCSVExport.aspx";
         static readonly string ManualPage = "https://kintoshmalae.gitbooks.io/foh-management-manual/content/";
+        static readonly string EMailPage = "https://zpactheatre.com/webmail";
 
         ChromiumWebBrowser webBrowser;
         ChromiumWebBrowser manualBrowser;
+        ChromiumWebBrowser mailBrowser;
         DownloadHandler downloadHandler;
 
         public MainWindow() {
             InitializeComponent();
 
-            printDialog.Document = new DoorListPrinter();
-            printDialog.Document.DocumentName = "doorList";
+            printDialog.Document = new DoorListPrinter {
+                DocumentName = "doorList"
+            };
 
             webBrowser = new ChromiumWebBrowser(HomePage);
             downloadHandler = new DownloadHandler();
@@ -53,15 +56,26 @@ namespace FOHManagerUI {
             // this.Controls.Add(webBrowser);
             pWebBrowser.Controls.Add(webBrowser);
 
-            manualBrowser = new ChromiumWebBrowser(ManualPage);
-            manualBrowser.Dock = DockStyle.Fill;
-            manualBrowser.Location = new System.Drawing.Point(13, 13);
-            manualBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            manualBrowser.Size = new System.Drawing.Size(pgManual.Size.Width - 13 - 13, pManual.Size.Height - 13 - 13);
-            manualBrowser.Name = "manualBrowser";
+            manualBrowser = new ChromiumWebBrowser(ManualPage) {
+                Dock = DockStyle.Fill,
+                Location = new System.Drawing.Point(13, 13),
+                MinimumSize = new System.Drawing.Size(20, 20),
+                Size = new System.Drawing.Size(pgManual.Size.Width - 13 - 13, pManual.Size.Height - 13 - 13),
+                Name = "manualBrowser"
+            };
             pManual.Controls.Add(manualBrowser);
 
-            pgMail.SetInvisible();
+            mailBrowser = new ChromiumWebBrowser(EMailPage) {
+                Dock = DockStyle.Fill,
+                Location = new System.Drawing.Point(13, 13),
+                MinimumSize = new System.Drawing.Size(20, 20),
+                Size = new System.Drawing.Size(pgMail.Size.Width - 13 - 13, pgMail.Size.Height - 13 - 13),
+                Name = "mailBrowser"
+            };
+            mailBrowser.FrameLoadEnd += automaticLoginEMail;
+            pMail.Controls.Add(mailBrowser);
+
+            // pgMail.SetInvisible();
             pgShowReport.SetInvisible();
             pgRoster.SetInvisible();
             pgVolunteers.SetInvisible();
@@ -70,8 +84,9 @@ namespace FOHManagerUI {
             if (FOHBackend.Settingsv2.hasExistingSettings()) {
                 FOHBackend.Settingsv2.Active.copy();
             } else {
-                SettingsWindow wndSettings = new SettingsWindow();
-                wndSettings.Text = "Initial Settings";
+                SettingsWindow wndSettings = new SettingsWindow {
+                    Text = "Initial Settings"
+                };
                 wndSettings.bCancel.Enabled = false;
                 wndSettings.ShowDialog();
             }
@@ -82,6 +97,11 @@ namespace FOHManagerUI {
             webBrowser.FrameLoadEnd -= automaticLogin;
         }
 
+        void automaticLoginEMail(object sender, EventArgs args) {
+            loginEMailUser(mailBrowser);
+            mailBrowser.FrameLoadEnd -= automaticLoginEMail;
+        }
+
         void loginUser(IWebBrowser browser) {
             string uname = FOHBackend.Settingsv2.Active.TryBooking.Username;
             string pword = FOHBackend.Settingsv2.Active.TryBooking.Password;
@@ -89,6 +109,13 @@ namespace FOHManagerUI {
             // string pword = FOHBackend.Settings.ActiveSettings.TryBookingPassword;
 
             browser.EvaluateScriptAsync(FOHBackend.ui.Scripts.getAutologinCommand(uname, pword));
+        }
+
+        void loginEMailUser(IWebBrowser browser) {
+            string uname = FOHBackend.Settingsv2.Active.SMTP.Username;
+            string pword = FOHBackend.Settingsv2.Active.SMTP.Password;
+
+            browser.EvaluateScriptAsync(FOHBackend.ui.Scripts.getAutologinEMailCommand(uname, pword));
         }
 
         void exportData() {
@@ -285,8 +312,7 @@ namespace FOHManagerUI {
         private void MainWindow_FormClosing(Object sender, FormClosingEventArgs e) {
             List<VolunteerRecord> _items = new List<VolunteerRecord>();
             foreach (object i in lstVolunteerRecords.Items) {
-                VolunteerRecord _rec = i as VolunteerRecord;
-                if (_rec != null) _items.Add(_rec);
+                if (i is VolunteerRecord _rec) _items.Add(_rec);
             }
             VolunteerRecord.storeJSONList(_items, new System.IO.FileInfo(LocalVolunteers));
         }
