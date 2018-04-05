@@ -98,9 +98,10 @@ namespace FOHBackend.DoorList {
         private int currentRow;
         private int currentPage;
 
+
         private void loadSizes() {
             doorListSizes = new DoorListEntrySizes();
-            EnumerationGenerator gen = new EnumerationGenerator(doorList);
+            EnumerationGeneratorDoorEntry gen = new EnumerationGeneratorDoorEntry(doorList);
             doorListSizes.firstNameWidth = requiredWidth(gen.firstNames, 0);
             int minWidth = Math.Max(0, NameHeaderWidth - doorListSizes.firstNameWidth - buffer - buffer);
             doorListSizes.lastNameWidth = requiredWidth(gen.lastNames, minWidth);
@@ -126,13 +127,44 @@ namespace FOHBackend.DoorList {
 
             if (doorListSizes == null) loadSizes();
 
+            // Load Table entries
+            this.entries = new TableData[doorList.Count];
+            TableElement fdElement = new TableElement { text = FreeDrinkText };
+            for (int x = 0; x < doorList.Count; x++) {
+                DoorListEntry row = doorList[x];
+                entries[x] = new TableData {
+                    items = new TableElement[headers.Length]
+                };
+                int i = 0;
+                entries[x].items[i] = new TableElement { text = /* (row.firstName + " " + row.lastName) */ (row.lastName + ", " + row.firstName) }; i++;
+                entries[x].items[i] = new TableElement { text = row.contactNumber }; i++;
+                entries[x].items[i] = new TableElement { text = TicketTypeHelper.getTicketTypeName(row.ticketType) }; i++;
+                entries[x].items[i] = new TableElement { text = row.ticketPrice }; i++;
+                entries[x].items[i] = new TableElement { text = row.promoCode.promoCode }; i++;
+                entries[x].items[i] = new TableElement { text = row.seat.ToString() }; i++;
+                entries[x].items[i] = row.promoCode.hasFreeDrink ? fdElement : EMPTY_TABLE_ELEMENT; i++;
+                entries[x].items[i] = EMPTY_TABLE_ELEMENT;
+            }
+
             currentRow = 0;     // reset to the first row
             currentPage = 0;    // reset to the first page
         }
 
+        private TableHeader[] headers = {
+            new TableHeader { name = NameHeader, alignment = StringAlignment.Near },
+            new TableHeader { name = PhoneHeader },
+            new TableHeader { name = TicketHeader, mergeWithFollowing = true },
+            new TableHeader { name = "" },
+            new TableHeader { name = PromoHeader },
+            new TableHeader { name = SeatHeader },
+            new TableHeader { name = "", mergeWithFollowing = true },
+            new TableHeader { name = "", isCheckbox = true }
+        };
+
+        private TableData[] entries = new TableData[0];
+
         protected override void OnPrintPage(System.Drawing.Printing.PrintPageEventArgs e) {
             base.OnPrintPage(e);
-
             /*
             int leftMargin = this.leftMargin;
             int topMargin = this.topMargin;
@@ -205,6 +237,9 @@ namespace FOHBackend.DoorList {
             e.Graphics.DrawString("Page " + (currentPage + 1), subHeaderFont, Brushes.Black, layoutRect, fmt);
             printableHeight -= subHeaderLineHeight + buffer;
 
+            currentRow = printTable(e.Graphics, leftMargin, topMargin, printableWidth, printableHeight, headers, entries, currentRow);
+
+            /*
             int tableWidth = doorListSizes.tableWidth + boxSize + (buffer * 11);
             if (tableWidth < printableWidth) leftMargin += (printableWidth - tableWidth) / 2;
             printableWidth = Math.Min(printableWidth, tableWidth);
@@ -308,16 +343,16 @@ namespace FOHBackend.DoorList {
                 printableHeight -= lineHeight + buffer;
                 currentRow++;
             }
-
+            */
             currentPage++;
             e.HasMorePages = (currentRow < doorList.Count);
         }
     }
     
-    class EnumerationGenerator {
+    class EnumerationGeneratorDoorEntry {
         private List<DoorListEntry> doorList;
 
-        public EnumerationGenerator(List<DoorListEntry> dList) {
+        public EnumerationGeneratorDoorEntry(List<DoorListEntry> dList) {
             this.doorList = dList;
         }
 

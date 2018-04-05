@@ -164,22 +164,34 @@ namespace FOHBackend.DoorList {
             char sep = '-';
             string comboPatt = @"^[0-9]{18}?$";
             string mobilePatt = @"^[0][4][0-9]{8}?$";
+            string mobileBPatt = @"^[4][0-9]{8}?$";
             string localPatt = @"^[0-9]{8}?$";
             string stdPatt = @"^[0][0-9]{9}?$";
+            string stdBPatt = @"^[2378][0-9]{8}?$";
             string intlMPatt = @"^[+][6][1][4][0-9]{8}?$";
+            string intlMBPatt = @"^[6][1][4][0-9]{8}?$";
             string intlPatt = @"^[+][6][1][0-9]{9}?$";
+            string intlBPatt = @"^[6][1][0-9]{9}?$";
             if (Regex.Match(phone, comboPatt).Value != String.Empty) {
-                return phone.Substring(0, 4) + sep + phone.Substring(4, 4) + " / " + phone.Substring(8, 4) + sep + phone.Substring(8+4, 3) + sep + phone.Substring(8+7, 3);
-            } if (Regex.Match(phone, mobilePatt).Value != String.Empty) {
+                return phone.Substring(0, 4) + sep + phone.Substring(4, 4) + " / " + phone.Substring(8, 4) + sep + phone.Substring(8 + 4, 3) + sep + phone.Substring(8 + 7, 3);
+            } else if (Regex.Match(phone, mobilePatt).Value != String.Empty) {
                 return phone.Substring(0, 4) + sep + phone.Substring(4, 3) + sep + phone.Substring(7, 3);
+            } else if (Regex.Match(phone, mobileBPatt).Value != String.Empty) {
+                return "0" + phone.Substring(0, 3) + sep + phone.Substring(3, 3) + sep + phone.Substring(6, 3);
             } else if (Regex.Match(phone, localPatt).Value != String.Empty) {
                 return phone.Substring(0, 4) + sep + phone.Substring(4, 4);
             } else if (Regex.Match(phone, stdPatt).Value != String.Empty) {
                 return phone.Substring(0, 2) + " " + phone.Substring(2, 4) + sep + phone.Substring(6, 4);
+            } else if (Regex.Match(phone, stdBPatt).Value != String.Empty) {
+                return "0" + phone.Substring(0, 1) + " " + phone.Substring(1, 4) + sep + phone.Substring(5, 4);
             } else if (Regex.Match(phone, intlMPatt).Value != String.Empty) {
                 return "0" + phone.Substring(3, 3) + sep + phone.Substring(6, 3) + sep + phone.Substring(9, 3);
+            } else if (Regex.Match(phone, intlMBPatt).Value != String.Empty) {
+                return "0" + phone.Substring(2, 3) + sep + phone.Substring(5, 3) + sep + phone.Substring(8, 3);
             } else if (Regex.Match(phone, intlPatt).Value != String.Empty) {
                 return "0" + phone.Substring(3, 1) + " " + phone.Substring(4, 4) + sep + phone.Substring(8, 4);
+            } else if (Regex.Match(phone, intlBPatt).Value != String.Empty) {
+                return "0" + phone.Substring(2, 1) + " " + phone.Substring(3, 4) + sep + phone.Substring(7, 4);
             }
             return phone;
         }

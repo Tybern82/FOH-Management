@@ -117,15 +117,24 @@ namespace FOHBackend.DoorList {
         /// <param name="items">List of items being displayed</param>
         /// <returns>Minimum width required for this list to fully display, maximized by the printable width of the document</returns>
         public int requiredWidth(IEnumerable<string> items, int minWidth) {
+            Graphics g = PrinterSettings.CreateMeasurementGraphics();
+            return requiredWidth(items, g, minWidth);
+        }
+
+        public int requiredWidth(IEnumerable<string> items, string header, int minWidth) {
+            Graphics g = PrinterSettings.CreateMeasurementGraphics();
+            SizeF sz = g.MeasureString(header, subHeaderFont, new Size(printableWidth, subHeaderLineHeight));
+            minWidth = Math.Max(minWidth, (int)Math.Round(sz.Width, MidpointRounding.AwayFromZero));
+            return requiredWidth(items, g, minWidth);
+        }
+
+        private int requiredWidth(IEnumerable<string> items, Graphics g, int minWidth) {
             int width = minWidth;
             StringFormat fmt = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.LineLimit);
             HashSet<string> uniqueItems = new HashSet<string>(items);
-            Graphics g = PrinterSettings.CreateMeasurementGraphics();
             foreach (string item in uniqueItems) {
                 SizeF sz = g.MeasureString(item, bodyFont, new Size(printableWidth, lineHeight));
                 width = Math.Max(width, (int)Math.Round(sz.Width, MidpointRounding.AwayFromZero));
-                // Size sz = TextRenderer.MeasureText(g, item, bodyFont, new Size(printableWidth, lineHeight));
-                // width = Math.Max(width, sz.Width);
             }
             return width;
         }
@@ -157,6 +166,156 @@ namespace FOHBackend.DoorList {
         /// <returns>Graphics rectangle defining an area coverering these cells</returns>
         protected Rectangle getArea(int boxHeight, int boxWidth, int topMargin, int leftMargin, int row, int column, int width, int height) {
             return new Rectangle(leftMargin + (column * boxWidth), topMargin + (row * boxHeight), boxWidth * width, boxHeight * height);
+        }
+
+        protected class TableHeader {
+            public string name;
+            public StringAlignment alignment = StringAlignment.Center;
+            public bool isCheckbox = false;
+            public bool mergeWithFollowing = false;
+            public int requiredWidth = 0;
+        }
+
+        protected class TableData {
+            public TableElement[] items;
+        }
+
+        protected class TableElement {
+            public string text;
+        }
+
+        protected static readonly TableElement EMPTY_TABLE_ELEMENT = new TableElement { text = "" };
+
+        protected class EnumerationGenerator {
+            private TableData[] tdata;
+
+            public EnumerationGenerator(TableData[] tdata) {
+                this.tdata = tdata;
+            }
+
+            public IEnumerable<string> getColumn(int i) {
+                foreach (TableData td in tdata) {
+                    yield return td.items[i].text;
+                }
+            }
+        }
+
+        private void calculateSizes(TableHeader[] headers, TableData[] data) {
+            EnumerationGenerator gen = new EnumerationGenerator(data);
+            int boxSize = (bodyFont.Height * 2 / 3) + buffer;
+            for (int x = 0; x < headers.Length; x++) {
+                headers[x].requiredWidth = requiredWidth(gen.getColumn(x), headers[x].name, headers[x].isCheckbox ? boxSize : 0);
+            }
+        }
+
+        protected int printTable(Graphics g, int leftMargin, int topMargin, int printableWidth, int printableHeight, TableHeader[] headers, TableData[] data, int currentRow) {
+            if (data.Length != 0) {
+                if (headers.Length != data[0].items.Length) throw new IndexOutOfRangeException("Mismatch between number of headers and entries in the table.");
+            }
+            int drawBorderAt = 4;
+            int boxSize = bodyFont.Height * 2 / 3;
+            int bufferDiff = buffer - drawBorderAt;
+
+            StringFormat fmt = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap | StringFormatFlags.FitBlackBox);
+            fmt.Alignment = StringAlignment.Center;
+            fmt.LineAlignment = StringAlignment.Near;
+
+            Pen blackPen = new Pen(Brushes.Black, 1);
+
+            // Determine the width required for each column in the table.
+            if (currentRow == 0) calculateSizes(headers, data);
+            int tableWidth = 0;
+            foreach (TableHeader h in headers) {
+                tableWidth += h.requiredWidth;
+            }
+            tableWidth += (buffer * (headers.Length));
+            if (tableWidth < printableWidth) leftMargin += (printableWidth - tableWidth) / 2;
+            printableWidth = Math.Min(printableWidth, tableWidth);
+
+            // Draw the top line of the table
+            g.DrawLine(blackPen, leftMargin, topMargin, leftMargin + printableWidth - bufferDiff, topMargin);
+            topMargin += buffer - drawBorderAt;
+            printableHeight -= buffer;
+
+            // Print Table Headers
+
+            fmt.LineAlignment = StringAlignment.Center;
+            // Draw the left side of the first box (we'll add a right side for each header which will complete the table)
+            g.DrawLine(blackPen, leftMargin, topMargin - bufferDiff, leftMargin, topMargin + subHeaderLineHeight + drawBorderAt);
+            // Centre the headers
+            fmt.Alignment = StringAlignment.Center;
+            
+            float linePos = leftMargin - bufferDiff;
+            for (int x = 0; x < headers.Length; x++) {
+                TableHeader h = headers[x];
+                string text = h.name;
+                int requiredWidth = h.requiredWidth;
+                while ((h != null) && (h.mergeWithFollowing)) {
+                    requiredWidth += buffer;
+                    x++;
+                    h = (x < headers.Length) ? headers[x] : null;
+                    if (h != null) {
+                        requiredWidth += h.requiredWidth;
+                        text += h.name;
+                    }
+                }
+                RectangleF box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(requiredWidth+buffer, subHeaderLineHeight+buffer));
+                // Draw the Header Text
+                g.DrawString(text, subHeaderFont, Brushes.Black, box, fmt);
+                linePos = box.Left + requiredWidth + drawBorderAt;
+                // Add the right-hand side of the box
+                g.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
+            }
+
+            /*
+            foreach (TableHeader h in headers) {
+                RectangleF box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(h.requiredWidth+buffer, subHeaderLineHeight+buffer));
+                // Draw the Header Text
+                g.DrawString(h.name, subHeaderFont, Brushes.Black, box, fmt);
+                linePos = box.Left + h.requiredWidth + drawBorderAt;
+                // Add the right-hand side of the box
+                g.DrawLine(blackPen, linePos, topMargin - bufferDiff, linePos, topMargin + subHeaderLineHeight + drawBorderAt);
+            }
+            */
+
+            // Draw the line under the headers
+            g.DrawLine(blackPen, leftMargin, topMargin + subHeaderLineHeight + drawBorderAt, leftMargin + printableWidth-bufferDiff, topMargin + subHeaderLineHeight + drawBorderAt);
+            
+            topMargin += subHeaderLineHeight + buffer;
+            printableHeight -= subHeaderLineHeight + buffer;
+
+            while ((currentRow < data.Length) && (printableHeight > (lineHeight + buffer))) {
+                TableData td = data[currentRow];
+
+                // Draw left side of table (again, we'll be adding a right side on each entry
+                g.DrawLine(blackPen, leftMargin, topMargin - bufferDiff, leftMargin, topMargin + lineHeight + drawBorderAt);
+
+                if (td.items.Length != headers.Length) throw new IndexOutOfRangeException("Mismatch between number of headers and entries in the table.");
+                float leftPos = leftMargin - bufferDiff;
+                for (int x = 0; x < headers.Length; x++) {
+                    TableElement e = td.items[x];
+                    TableHeader h = headers[x];
+                    fmt.Alignment = h.alignment;
+                    RectangleF box = new RectangleF(new PointF(leftPos + bufferDiff, topMargin), new SizeF(h.requiredWidth + buffer, lineHeight + buffer));
+                    if (h.isCheckbox) {
+                        g.DrawRectangle(blackPen, box.Left+buffer, topMargin + ((lineHeight + buffer - boxSize) / 2), boxSize, boxSize);
+                    } else {
+                        g.DrawString(e.text, bodyFont, Brushes.Black, box, fmt);
+                    }
+                    // Draw the right side of the box
+                    leftPos = box.Left + h.requiredWidth + drawBorderAt;
+                    g.DrawLine(blackPen, leftPos, topMargin - bufferDiff, leftPos, topMargin + lineHeight + drawBorderAt);
+                    // leftPos += h.requiredWidth;
+                }
+
+                // Draw the line under the table
+                g.DrawLine(blackPen, leftMargin, topMargin + lineHeight + drawBorderAt, leftMargin + printableWidth-bufferDiff, topMargin + lineHeight + drawBorderAt);
+
+                topMargin += lineHeight + buffer;
+                printableHeight -= lineHeight + buffer;
+                currentRow++;
+            }
+            return currentRow;
         }
     }
 }

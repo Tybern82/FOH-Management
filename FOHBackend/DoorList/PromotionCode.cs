@@ -21,8 +21,12 @@ namespace FOHBackend.DoorList {
             // TODO: Update to request free-drink status of unknown promo codes
             switch (code) {
                 case "door":
+                case "doorlcm":
                 case "Comp1":
+                case "Comp1lcm":
                 case "Prepaid":
+                case "Prepaidlcm":
+                case "zpac100":
                 case "":
                     hasFreeDrink = false;
                     break;
