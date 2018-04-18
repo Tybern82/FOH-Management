@@ -7,9 +7,10 @@ using System.IO;
 
 using Newtonsoft.Json;
 using FOHBackend.Mail;
+using FOHBackend.DoorList;
 
 namespace FOHBackend {
-    class Settings {
+    public class Settings {
 
         private static Settings _ActiveSettings;
         public static Settings ActiveSettings {
@@ -20,7 +21,7 @@ namespace FOHBackend {
             set { _ActiveSettings = value; }
         }
 
-        static readonly string DefaultSettingFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FOHManagement.settings");
+        public static readonly string DefaultSettingFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FOHManagement.settings");
 
         public static Settings loadDefaultSettings() {
             _ActiveSettings = loadJSONSettings(new FileInfo(DefaultSettingFile));
@@ -63,8 +64,8 @@ namespace FOHBackend {
     }
 
     public class SMTPSettings {
-        public string SMTPServer { get; set; } = "smtp.gmail.com";
-        public UInt16 SMTPPort { get; set; } = 587;
+        public string SMTPServer { get; set; } = "mail.zpactheatre.com";
+        public UInt16 SMTPPort { get; set; } = 465;
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
     }
@@ -79,7 +80,7 @@ namespace FOHBackend {
         public SMTPSettings SMTP { get; set; } = new SMTPSettings();
         public MailAddress SenderAddress { get; set; } = new MailAddress() { Name = "User", EMail = "user@host.com" };
 
-        public bool MarkThroughSeats { get; set; } = true;
+        public bool MarkThroughSeats { get; set; } = false;
 
 
         public Settingsv2 copy() {
@@ -103,62 +104,125 @@ namespace FOHBackend {
             MarkThroughSeats = s.MarkThroughSeats;
         }
 
-        private static Settingsv2 _Active = null;
+        public void copyFrom(Settings s) {
+            this.MarkThroughSeats = s.MarkOutSoldSeats;
+
+            this.TryBooking.Username = s.TryBookingUsername;
+            this.TryBooking.Password = s.TryBookingPassword;
+
+            this.SMTP.SMTPServer = s.SMTP.SMTPServer;
+            this.SMTP.SMTPPort = s.SMTP.SMTPPort;
+            this.SMTP.Username = s.GMailUsername;
+            this.SMTP.Password = s.GMailPassword;
+
+            this.SenderAddress.Name = "FOH Management App";
+            this.SenderAddress.EMail = s.SMTP.Username;
+        }
+        
         public static Settingsv2 Active {
+            get {
+                return SettingsLoader.Active;
+            }
+        }
+    }
+
+    public class Settingsv3 : Settingsv2 {
+
+        public new static Settingsv3 Active {
+            get {
+                return SettingsLoader.Active;
+            }
+        }
+
+        public string DLPConfig { get; set; }
+
+        private DoorListPrinterSettings _doorListPrinterSettings = null;
+        [JsonIgnore] public DoorListPrinterSettings DoorListPrintSettings {
+            get {
+                if (_doorListPrinterSettings == null) _doorListPrinterSettings = new DoorListPrinterSettings(DLPConfig);
+                return _doorListPrinterSettings;
+            }
+        }
+
+        public Settingsv3() : base() {
+            this.DLPConfig = DoorListPrinterSettings.DEFAULT_CONFIG;
+        }
+
+        public Settingsv3(Settingsv2 oldSettings) : this() {
+            copyFrom(oldSettings);
+        }
+
+        public new Settingsv3 copy() {
+            Settingsv3 _result = new Settingsv3();
+            _result.copyFrom(this);
+            return _result;
+        }
+
+        public void copyFrom(Settingsv3 s) {
+            base.copyFrom(s);
+            DLPConfig = s.DLPConfig;
+        }
+    }
+
+    public class SettingsLoader {
+
+        private static readonly string AppSettingsFolder = "Jeff Sweeney - FOH Management";
+        private static readonly string SettingsFilev2 = "FOHManagement.v2.settings";
+        private static readonly string SettingsFilev3 = "FOHManagement.v3.settings";
+
+        public static DirectoryInfo SettingsFolder {
+            get {
+                // TODO: Update to use UICallback to get the base path
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                path = Path.Combine(path, AppSettingsFolder);
+                DirectoryInfo _result = new DirectoryInfo(path);
+                if (!_result.Exists) _result.Create();
+                return _result;
+            }
+        }
+
+        private static Settingsv3 _Active = null;
+        public static Settingsv3 Active {
             get {
                 if (_Active == null) loadSettings();
                 return _Active;
             }
         }
 
-        private static FileInfo _SettingsFile = null;
-        private static FileInfo SettingsFile {
-            get {
-                if (_SettingsFile == null) {
-                    string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                    path = Path.Combine(path, "Jeff Sweeney - FOH Management");
-                    DirectoryInfo dir = new DirectoryInfo(path);
-                    if (!dir.Exists) dir.Create();
-                    path = Path.Combine(path, "FOHManagement.v2.settings");
-                    _SettingsFile = new FileInfo(path);
-                }
-                return _SettingsFile;
-            }
+        private static FileInfo getSettings(string settingsFile) {
+            return new FileInfo(Path.Combine(SettingsFolder.FullName, settingsFile));
         }
 
         private static void loadSettings() {
-            if (SettingsFile.Exists) {
-                using (StreamReader reader = new StreamReader(SettingsFile.OpenRead())) {
-                    _Active = JsonConvert.DeserializeObject<Settingsv2>(reader.ReadToEnd());
+            FileInfo settingsFile = getSettings(SettingsFilev3);
+            if (settingsFile.Exists) {
+                // Load v3 settings
+                using (StreamReader reader = new StreamReader(settingsFile.OpenRead())) {
+                    _Active = JsonConvert.DeserializeObject<Settingsv3>(reader.ReadToEnd());
                     reader.Close();
                 }
-            } else {
-                Settings s = Settings.ActiveSettings;               // will load a v1 settings file if it is present
-                _Active = new Settingsv2();                         // create an empty settings file....
-                _Active.MarkThroughSeats = s.MarkOutSoldSeats;      // ... copy over existing settings (if found)...
-
-                _Active.TryBooking.Username = s.TryBookingUsername;
-                _Active.TryBooking.Password = s.TryBookingPassword;
-
-                _Active.SMTP.SMTPServer = s.SMTP.SMTPServer;
-                _Active.SMTP.SMTPPort = s.SMTP.SMTPPort;
-                _Active.SMTP.Username = s.GMailUsername;
-                _Active.SMTP.Password = s.GMailPassword;
-
-                _Active.SenderAddress.Name = "FOH Management App";
-                _Active.SenderAddress.EMail = s.SMTP.Username;                
-
-                saveSettings();                                     // ... and make sure we save the new settings data
+                return;
             }
-        }
-
-        public static bool hasExistingSettings() {
-            return (SettingsFile.Exists);
+            settingsFile = getSettings(SettingsFilev2);
+            if (settingsFile.Exists) {
+                // Load v2 settings
+                using (StreamReader reader = new StreamReader(settingsFile.OpenRead())) {
+                    Settingsv2 _oldSettings = JsonConvert.DeserializeObject<Settingsv2>(reader.ReadToEnd());
+                    reader.Close();
+                    // Trigger a settings check for the update, since new default settings may have been added
+                    _Active = FOHBackendCallbackManager.CallbackManager.triggerInitialSettings(new Settingsv3(_oldSettings));
+                }
+                saveSettings(); // make sure the newly loaded settings are saved
+                return;
+            }
+            _Active = FOHBackendCallbackManager.CallbackManager.triggerInitialSettings(new Settingsv3());   // create a new default settings file...
+            saveSettings();                                                                                 // ... and make sure it is saved for future use
         }
 
         public static void saveSettings() {
             if (_Active != null) {
-                using (StreamWriter writer = new StreamWriter(SettingsFile.OpenWrite())) {
+                FileInfo settingsFile = getSettings(SettingsFilev3);
+                using (StreamWriter writer = new StreamWriter(settingsFile.OpenWrite())) {
                     writer.WriteLine(JsonConvert.SerializeObject(_Active, Formatting.Indented));
                     writer.Flush();
                     writer.Close();

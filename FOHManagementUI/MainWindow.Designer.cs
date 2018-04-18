@@ -23,7 +23,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.bSelectExport = new System.Windows.Forms.Button();
             this.bExport = new System.Windows.Forms.Button();
             this.bPrint = new System.Windows.Forms.Button();
@@ -92,9 +91,10 @@
             this.lProduction = new System.Windows.Forms.Label();
             this.cmbProduction = new System.Windows.Forms.ComboBox();
             this.pgMail = new System.Windows.Forms.TabPage();
+            this.pMail = new System.Windows.Forms.Panel();
             this.pgManual = new System.Windows.Forms.TabPage();
             this.pManual = new System.Windows.Forms.Panel();
-            this.pMail = new System.Windows.Forms.Panel();
+            this.openConfigFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mbarMainMenu.SuspendLayout();
             this.tabMainUI.SuspendLayout();
             this.pgTicketing.SuspendLayout();
@@ -224,8 +224,9 @@
             this.mHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mitmAbout,
             this.mitmManual,
-            this.mitmOfflineManual});
-            this.mHelp.Image = ((System.Drawing.Image)(resources.GetObject("mHelp.Image")));
+            this.mitmOfflineManual,
+            this.openConfigFolderToolStripMenuItem});
+            this.mHelp.Image = global::FOHManagerUI.Properties.Resources.HelpIcon;
             this.mHelp.Name = "mHelp";
             this.mHelp.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.mHelp.Size = new System.Drawing.Size(60, 20);
@@ -235,7 +236,7 @@
             // 
             this.mitmAbout.Image = global::FOHManagerUI.Properties.Resources.AboutIcon;
             this.mitmAbout.Name = "mitmAbout";
-            this.mitmAbout.Size = new System.Drawing.Size(153, 22);
+            this.mitmAbout.Size = new System.Drawing.Size(180, 22);
             this.mitmAbout.Text = "&About";
             this.mitmAbout.Click += new System.EventHandler(this.mitmAbout_onClick);
             // 
@@ -243,7 +244,7 @@
             // 
             this.mitmManual.Image = global::FOHManagerUI.Properties.Resources.ManualIcon;
             this.mitmManual.Name = "mitmManual";
-            this.mitmManual.Size = new System.Drawing.Size(153, 22);
+            this.mitmManual.Size = new System.Drawing.Size(180, 22);
             this.mitmManual.Text = "&Manual";
             this.mitmManual.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
             // 
@@ -251,7 +252,7 @@
             // 
             this.mitmOfflineManual.Image = global::FOHManagerUI.Properties.Resources.ManualIcon;
             this.mitmOfflineManual.Name = "mitmOfflineManual";
-            this.mitmOfflineManual.Size = new System.Drawing.Size(153, 22);
+            this.mitmOfflineManual.Size = new System.Drawing.Size(180, 22);
             this.mitmOfflineManual.Text = "Offline Manual";
             this.mitmOfflineManual.Click += new System.EventHandler(this.mitmOfflineManual_Click);
             // 
@@ -1016,6 +1017,16 @@
             this.pgMail.TabIndex = 5;
             this.pgMail.Text = "Mail";
             // 
+            // pMail
+            // 
+            this.pMail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pMail.Location = new System.Drawing.Point(4, 7);
+            this.pMail.Name = "pMail";
+            this.pMail.Size = new System.Drawing.Size(520, 456);
+            this.pMail.TabIndex = 1;
+            // 
             // pgManual
             // 
             this.pgManual.Controls.Add(this.pManual);
@@ -1038,15 +1049,12 @@
             this.pManual.Size = new System.Drawing.Size(517, 453);
             this.pManual.TabIndex = 0;
             // 
-            // pMail
+            // openConfigFolderToolStripMenuItem
             // 
-            this.pMail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pMail.Location = new System.Drawing.Point(4, 7);
-            this.pMail.Name = "pMail";
-            this.pMail.Size = new System.Drawing.Size(520, 456);
-            this.pMail.TabIndex = 1;
+            this.openConfigFolderToolStripMenuItem.Name = "openConfigFolderToolStripMenuItem";
+            this.openConfigFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openConfigFolderToolStripMenuItem.Text = "Open Config Folder";
+            this.openConfigFolderToolStripMenuItem.Click += new System.EventHandler(this.openConfigFolderToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -1166,6 +1174,7 @@
         private System.Windows.Forms.Button bExportOnly;
         private System.Windows.Forms.ToolStripMenuItem mitmSettings;
         private System.Windows.Forms.Panel pMail;
+        private System.Windows.Forms.ToolStripMenuItem openConfigFolderToolStripMenuItem;
     }
 }
 

@@ -45,6 +45,8 @@
             this.lblSenderEMail = new System.Windows.Forms.Label();
             this.txtSenderName = new System.Windows.Forms.TextBox();
             this.lblSenderName = new System.Windows.Forms.Label();
+            this.cmbPrintModel = new System.Windows.Forms.ComboBox();
+            this.lblPrintModel = new System.Windows.Forms.Label();
             this.grpTryBooking.SuspendLayout();
             this.grpSMTP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nSMTPPort)).BeginInit();
@@ -98,6 +100,7 @@
             this.txtTryBookingPassword.Size = new System.Drawing.Size(350, 20);
             this.txtTryBookingPassword.TabIndex = 2;
             this.txtTryBookingPassword.Text = "Password";
+            this.txtTryBookingPassword.UseSystemPasswordChar = true;
             this.txtTryBookingPassword.TextChanged += new System.EventHandler(this.txtTryBookingPassword_TextChanged);
             // 
             // lblTryBookingPassword
@@ -115,7 +118,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(400, 378);
+            this.bCancel.Location = new System.Drawing.Point(400, 427);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 3;
@@ -126,7 +129,7 @@
             // bSave
             // 
             this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bSave.Location = new System.Drawing.Point(319, 377);
+            this.bSave.Location = new System.Drawing.Point(319, 426);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(75, 23);
             this.bSave.TabIndex = 4;
@@ -215,6 +218,7 @@
             this.txtSMTPPassword.Size = new System.Drawing.Size(350, 20);
             this.txtSMTPPassword.TabIndex = 6;
             this.txtSMTPPassword.Text = "Password";
+            this.txtSMTPPassword.UseSystemPasswordChar = true;
             this.txtSMTPPassword.TextChanged += new System.EventHandler(this.txtSMTPPassword_TextChanged);
             // 
             // txtSMTPUName
@@ -324,11 +328,38 @@
             this.lblSenderName.Text = "Name:";
             this.lblSenderName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // cmbPrintModel
+            // 
+            this.cmbPrintModel.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbPrintModel.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbPrintModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPrintModel.FormattingEnabled = true;
+            this.cmbPrintModel.Items.AddRange(new object[] {
+            "default"});
+            this.cmbPrintModel.Location = new System.Drawing.Point(118, 353);
+            this.cmbPrintModel.Name = "cmbPrintModel";
+            this.cmbPrintModel.Size = new System.Drawing.Size(351, 21);
+            this.cmbPrintModel.Sorted = true;
+            this.cmbPrintModel.TabIndex = 7;
+            this.cmbPrintModel.SelectedIndexChanged += new System.EventHandler(this.cmbPrintModel_SelectedIndexChanged);
+            // 
+            // lblPrintModel
+            // 
+            this.lblPrintModel.AutoSize = true;
+            this.lblPrintModel.Location = new System.Drawing.Point(30, 356);
+            this.lblPrintModel.Name = "lblPrintModel";
+            this.lblPrintModel.Size = new System.Drawing.Size(77, 13);
+            this.lblPrintModel.TabIndex = 8;
+            this.lblPrintModel.Text = "Printing Model:";
+            this.lblPrintModel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(487, 413);
+            this.ClientSize = new System.Drawing.Size(487, 462);
+            this.Controls.Add(this.lblPrintModel);
+            this.Controls.Add(this.cmbPrintModel);
             this.Controls.Add(this.gSenderAddress);
             this.Controls.Add(this.chkMarkSeats);
             this.Controls.Add(this.grpSMTP);
@@ -373,5 +404,7 @@
         private System.Windows.Forms.Label lblSenderEMail;
         private System.Windows.Forms.TextBox txtSenderName;
         private System.Windows.Forms.Label lblSenderName;
+        private System.Windows.Forms.ComboBox cmbPrintModel;
+        private System.Windows.Forms.Label lblPrintModel;
     }
 }

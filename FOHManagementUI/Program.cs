@@ -12,6 +12,18 @@ namespace FOHManagerUI {
         /// </summary>
         [STAThread]
         static void Main() {
+            /*
+            // Generates the default configuration files
+            System.IO.FileInfo fullSettingsFile = new System.IO.FileInfo(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Full.dlp"));
+            System.IO.FileInfo minimalSettingsFile = new System.IO.FileInfo(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Minimal.dlp"));
+
+            FOHBackend.DoorList.DoorListPrinterSettings defSettings = new FOHBackend.DoorList.DoorListPrinterSettings();
+            defSettings.ConfigName = "Full";
+            defSettings.saveSettings(fullSettingsFile);
+            defSettings.ConfigName = "Minimal";
+            defSettings.saveSettings(minimalSettingsFile);
+            return;
+            */
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

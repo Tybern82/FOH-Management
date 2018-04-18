@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
+using FOHBackend;
 using FOHBackend.DoorList;
 using FOHBackend.Reports;
 using FOHBackend.Roster;
@@ -34,6 +35,7 @@ namespace FOHManagerUI {
 
         public MainWindow() {
             InitializeComponent();
+            FOHBackendCallbackManager.registerCallback(new UICallbacks(this));
 
             printDialog.Document = new DoorListPrinter {
                 DocumentName = "doorList"
@@ -79,17 +81,6 @@ namespace FOHManagerUI {
             pgShowReport.SetInvisible();
             pgRoster.SetInvisible();
             pgVolunteers.SetInvisible();
-
-
-            if (FOHBackend.Settingsv2.hasExistingSettings()) {
-                FOHBackend.Settingsv2.Active.copy();
-            } else {
-                SettingsWindow wndSettings = new SettingsWindow {
-                    Text = "Initial Settings"
-                };
-                wndSettings.bCancel.Enabled = false;
-                wndSettings.ShowDialog();
-            }
         }
 
         void automaticLogin(object sender, EventArgs args) {
@@ -103,8 +94,8 @@ namespace FOHManagerUI {
         }
 
         void loginUser(IWebBrowser browser) {
-            string uname = FOHBackend.Settingsv2.Active.TryBooking.Username;
-            string pword = FOHBackend.Settingsv2.Active.TryBooking.Password;
+            string uname = FOHBackend.SettingsLoader.Active.TryBooking.Username;
+            string pword = FOHBackend.SettingsLoader.Active.TryBooking.Password;
             // string uname = FOHBackend.Settings.ActiveSettings.TryBookingUsername;
             // string pword = FOHBackend.Settings.ActiveSettings.TryBookingPassword;
 
@@ -112,8 +103,8 @@ namespace FOHManagerUI {
         }
 
         void loginEMailUser(IWebBrowser browser) {
-            string uname = FOHBackend.Settingsv2.Active.SMTP.Username;
-            string pword = FOHBackend.Settingsv2.Active.SMTP.Password;
+            string uname = FOHBackend.SettingsLoader.Active.SMTP.Username;
+            string pword = FOHBackend.SettingsLoader.Active.SMTP.Password;
 
             browser.EvaluateScriptAsync(FOHBackend.ui.Scripts.getAutologinEMailCommand(uname, pword));
         }
@@ -465,8 +456,64 @@ namespace FOHManagerUI {
         #endregion
 
         private void mitmSettings_Click(Object sender, EventArgs e) {
-            SettingsWindow wndSettings = new SettingsWindow();
-            wndSettings.ShowDialog(this);
+            SettingsWindow wndSettings = new SettingsWindow(SettingsLoader.Active);
+            DialogResult result = wndSettings.ShowDialog(this);
+            if (result == DialogResult.OK) {
+                SettingsLoader.Active.copyFrom(wndSettings.localSettings);
+                try {
+                    SettingsLoader.saveSettings();
+                } catch (Exception) {
+                    MessageBox.Show("Error saving settings");
+                }
+            }
+        }
+
+        private void openConfigFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            System.Diagnostics.Process.Start(SettingsLoader.SettingsFolder.FullName);
+        }
+    }
+
+    class UICallbacks : FOHBackend.FOHBackendCallback {
+
+        private MainWindow wndMain;
+
+        public UICallbacks(MainWindow wnd) {
+            this.wndMain = wnd;
+        }
+
+        public Settingsv3 InitialSettings(Settingsv3 defaultSettings) {
+            SettingsWindow wndSettings = new SettingsWindow(defaultSettings) {
+                Text = "Initial Settings"
+            };
+            wndSettings.bCancel.Enabled = false;
+
+            DialogResult result = DialogResult.Ignore;
+            if (wndMain.InvokeRequired) {
+                wndMain.Invoke((Action)(() => { result = wndSettings.ShowDialog(); }));
+            } else {
+                result = wndSettings.ShowDialog();
+            }
+            return (result == DialogResult.OK) ? wndSettings.localSettings : defaultSettings;
+        }
+
+        public string RequestString(string msg, string suggestedString) {
+            RequestStringWindow wndRequest = new RequestStringWindow(msg, suggestedString);
+            DialogResult _result = DialogResult.Ignore;
+            if (wndMain.InvokeRequired) {
+                wndMain.Invoke((Action)(() => { _result = wndRequest.ShowDialog(); }));
+            } else {
+                _result = wndRequest.ShowDialog();
+            }
+            return (_result == DialogResult.OK) ? wndRequest.getText() : suggestedString;
+        }
+
+        public void warningMessage(string msg) {
+            Console.WriteLine(msg);
+            if (wndMain.InvokeRequired) {
+                wndMain.Invoke((Action)(() => { MessageBox.Show(msg, "Warning", MessageBoxButtons.OK); }));
+            } else {
+                MessageBox.Show(msg, "Warning", MessageBoxButtons.OK);
+            }
         }
     }
 }

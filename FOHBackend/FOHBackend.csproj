@@ -110,6 +110,7 @@
     <Compile Include="DoorList\DoorListPrinter.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DoorList\DoorListPrinterSettings.cs" />
     <Compile Include="DoorList\PromotionCode.cs" />
     <Compile Include="DoorList\Seat.cs" />
     <Compile Include="DoorList\SeatingMapPrinter.cs">
@@ -129,6 +130,7 @@
     <Compile Include="Roster\VolunteerRecord.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TabPageExtensions.cs" />
+    <Compile Include="UICallback.cs" />
     <Compile Include="ui\Scripts.cs" />
   </ItemGroup>
   <ItemGroup>

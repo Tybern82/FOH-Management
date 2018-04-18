@@ -20,9 +20,9 @@ namespace FOHBackend.Mail {
 
         public static void sendBasicMessage(MailboxAddress sender, MailboxAddress recv, string subject, string body) {
             var msg = new MimeMessage();
-            msg.From.Add(sender != null ? sender : getAddress(Settingsv2.Active.SenderAddress));
+            msg.From.Add(sender != null ? sender : getAddress(SettingsLoader.Active.SenderAddress));
             msg.To.Add(recv);
-            msg.ReplyTo.Add(sender != null ? sender : getAddress(Settingsv2.Active.SenderAddress));
+            msg.ReplyTo.Add(sender != null ? sender : getAddress(SettingsLoader.Active.SenderAddress));
             msg.Subject = subject;
             msg.Body = new TextPart("plain") {
                 Text = body
@@ -32,11 +32,11 @@ namespace FOHBackend.Mail {
 
         public static void sendMessage(MimeMessage msg) {
             using (var client = new SmtpClient()) {
-                client.Connect(Settingsv2.Active.SMTP.SMTPServer, Settingsv2.Active.SMTP.SMTPPort, false);
+                client.Connect(SettingsLoader.Active.SMTP.SMTPServer, SettingsLoader.Active.SMTP.SMTPPort, false);
                 // client.Connect(Settings.ActiveSettings.SMTP.SMTPServer, Settings.ActiveSettings.SMTP.SMTPPort, false);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
                 // client.Authenticate(Settings.ActiveSettings.GMailUsername, Settings.ActiveSettings.GMailPassword);
-                client.Authenticate(Settingsv2.Active.SMTP.Username, Settingsv2.Active.SMTP.Password);
+                client.Authenticate(SettingsLoader.Active.SMTP.Username, SettingsLoader.Active.SMTP.Password);
                 client.Send(msg);
                 client.Disconnect(true);
             }

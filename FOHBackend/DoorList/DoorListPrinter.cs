@@ -125,8 +125,9 @@ namespace FOHBackend.DoorList {
         protected override void OnBeginPrint(System.Drawing.Printing.PrintEventArgs e) {
             base.OnBeginPrint(e);
 
+            /*
             if (doorListSizes == null) loadSizes();
-
+            
             // Load Table entries
             this.entries = new TableData[doorList.Count];
             TableElement fdElement = new TableElement { text = FreeDrinkText };
@@ -136,7 +137,7 @@ namespace FOHBackend.DoorList {
                     items = new TableElement[headers.Length]
                 };
                 int i = 0;
-                entries[x].items[i] = new TableElement { text = /* (row.firstName + " " + row.lastName) */ (row.lastName + ", " + row.firstName) }; i++;
+                entries[x].items[i] = new TableElement { text = (row.lastName + ", " + row.firstName) }; i++;
                 entries[x].items[i] = new TableElement { text = row.contactNumber }; i++;
                 entries[x].items[i] = new TableElement { text = TicketTypeHelper.getTicketTypeName(row.ticketType) }; i++;
                 entries[x].items[i] = new TableElement { text = row.ticketPrice }; i++;
@@ -145,21 +146,26 @@ namespace FOHBackend.DoorList {
                 entries[x].items[i] = row.promoCode.hasFreeDrink ? fdElement : EMPTY_TABLE_ELEMENT; i++;
                 entries[x].items[i] = EMPTY_TABLE_ELEMENT;
             }
+            */
+
+            this.entries = SettingsLoader.Active.DoorListPrintSettings.populateData(doorList);
 
             currentRow = 0;     // reset to the first row
             currentPage = 0;    // reset to the first page
         }
 
+        /*
         private TableHeader[] headers = {
-            new TableHeader { name = NameHeader, alignment = StringAlignment.Near },
-            new TableHeader { name = PhoneHeader },
-            new TableHeader { name = TicketHeader, mergeWithFollowing = true },
-            new TableHeader { name = "" },
-            new TableHeader { name = PromoHeader },
-            new TableHeader { name = SeatHeader },
-            new TableHeader { name = "", mergeWithFollowing = true },
-            new TableHeader { name = "", isCheckbox = true }
+            new TableHeader { title = NameHeader, alignment = StringAlignment.Near },
+            new TableHeader { title = PhoneHeader },
+            new TableHeader { title = TicketHeader, mergeWithFollowingHeader = true },
+            new TableHeader { title = "" },
+            new TableHeader { title = PromoHeader },
+            new TableHeader { title = SeatHeader },
+            new TableHeader { title = "", mergeWithFollowingHeader = true },
+            new TableHeader { title = "", isCheckbox = true }
         };
+        */
 
         private TableData[] entries = new TableData[0];
 
@@ -206,6 +212,57 @@ namespace FOHBackend.DoorList {
             fmt.Alignment = StringAlignment.Center;
             fmt.LineAlignment = StringAlignment.Near;
 
+            foreach (PageHeader hdr in SettingsLoader.Active.DoorListPrintSettings.pageHeaders) {
+                string title;
+                switch (hdr.headingType) {
+                    case PageHeaderTypes.CustomHeading:
+                        title = SettingsLoader.Active.DoorListPrintSettings.customHeadings[hdr.index];
+                        break;
+
+                    case PageHeaderTypes.SessionTitle:
+                        title = sessionTitle;
+                        break;
+
+                    case PageHeaderTypes.SessionTime:
+                        title = sessionTime;
+                        break;
+
+                    case PageHeaderTypes.ListTitle:
+                        title = listTitle;
+                        break;
+
+                        // Skip over unknown or missing headings
+                    case PageHeaderTypes.Unknown:
+                    default:
+                        continue;
+                }
+                int lineHeight; Font hdrFont;
+                switch (hdr.fontSelect) {
+                    case FontStyle.BodyText:
+                        lineHeight = bodyFont.Height;
+                        hdrFont = bodyFont;
+                        break;
+
+                    case FontStyle.MainHeading:
+                        lineHeight = headerLineHeight;
+                        hdrFont = headerFont;
+                        break;
+
+                    case FontStyle.SubHeading:
+                    case FontStyle.TableHeading:
+                    default:
+                        lineHeight = subHeaderLineHeight;
+                        hdrFont = subHeaderFont;
+                        break;
+                }
+                layoutRect = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(printableWidth, lineHeight));
+                e.Graphics.DrawString(title, hdrFont, Brushes.Black, layoutRect, fmt);
+                int h = lineHeight + buffer;
+                topMargin += h;
+                printableHeight -= h;
+            }
+
+            /*
             layoutRect = new RectangleF(new PointF(leftMargin, topMargin), new SizeF(printableWidth, headerLineHeight));
             e.Graphics.DrawString(sessionTitle, headerFont, Brushes.Black, layoutRect, fmt);
             int h = headerLineHeight + buffer;
@@ -224,7 +281,7 @@ namespace FOHBackend.DoorList {
             h = subHeaderLineHeight + buffer;
             topMargin += h;
             printableHeight -= h;
-            
+            */
 
             topMargin += buffer;
             printableHeight -= buffer;
@@ -236,8 +293,8 @@ namespace FOHBackend.DoorList {
             fmt.Alignment = StringAlignment.Far;
             e.Graphics.DrawString("Page " + (currentPage + 1), subHeaderFont, Brushes.Black, layoutRect, fmt);
             printableHeight -= subHeaderLineHeight + buffer;
-
-            currentRow = printTable(e.Graphics, leftMargin, topMargin, printableWidth, printableHeight, headers, entries, currentRow);
+            
+            currentRow = printTable(e.Graphics, leftMargin, topMargin, printableWidth, printableHeight, SettingsLoader.Active.DoorListPrintSettings.tableHeaders.ToArray(), entries, currentRow);
 
             /*
             int tableWidth = doorListSizes.tableWidth + boxSize + (buffer * 11);

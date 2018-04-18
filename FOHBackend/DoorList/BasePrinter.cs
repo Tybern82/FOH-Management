@@ -168,24 +168,6 @@ namespace FOHBackend.DoorList {
             return new Rectangle(leftMargin + (column * boxWidth), topMargin + (row * boxHeight), boxWidth * width, boxHeight * height);
         }
 
-        protected class TableHeader {
-            public string name;
-            public StringAlignment alignment = StringAlignment.Center;
-            public bool isCheckbox = false;
-            public bool mergeWithFollowing = false;
-            public int requiredWidth = 0;
-        }
-
-        protected class TableData {
-            public TableElement[] items;
-        }
-
-        protected class TableElement {
-            public string text;
-        }
-
-        protected static readonly TableElement EMPTY_TABLE_ELEMENT = new TableElement { text = "" };
-
         protected class EnumerationGenerator {
             private TableData[] tdata;
 
@@ -204,7 +186,7 @@ namespace FOHBackend.DoorList {
             EnumerationGenerator gen = new EnumerationGenerator(data);
             int boxSize = (bodyFont.Height * 2 / 3) + buffer;
             for (int x = 0; x < headers.Length; x++) {
-                headers[x].requiredWidth = requiredWidth(gen.getColumn(x), headers[x].name, headers[x].isCheckbox ? boxSize : 0);
+                headers[x].requiredWidth = requiredWidth(gen.getColumn(x), headers[x].title, headers[x].isCheckbox ? boxSize : 0);
             }
         }
 
@@ -248,15 +230,15 @@ namespace FOHBackend.DoorList {
             float linePos = leftMargin - bufferDiff;
             for (int x = 0; x < headers.Length; x++) {
                 TableHeader h = headers[x];
-                string text = h.name;
+                string text = h.title;
                 int requiredWidth = h.requiredWidth;
-                while ((h != null) && (h.mergeWithFollowing)) {
+                while ((h != null) && (h.mergeWithFollowingHeader)) {
                     requiredWidth += buffer;
                     x++;
                     h = (x < headers.Length) ? headers[x] : null;
                     if (h != null) {
                         requiredWidth += h.requiredWidth;
-                        text += h.name;
+                        text += h.title;
                     }
                 }
                 RectangleF box = new RectangleF(new PointF(linePos + bufferDiff, topMargin), new SizeF(requiredWidth+buffer, subHeaderLineHeight+buffer));

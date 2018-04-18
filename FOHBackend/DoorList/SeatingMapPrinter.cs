@@ -145,7 +145,7 @@ namespace FOHBackend.DoorList {
                     if (soldSeats.Contains(s)) {
                         // need to mark as sold
                         e.Graphics.FillRectangle(Brushes.LightGray, addMargin(seatArea, buffer));
-                        if (Settingsv2.Active.MarkThroughSeats) { 
+                        if (SettingsLoader.Active.MarkThroughSeats) { 
                         // if (Settings.ActiveSettings.MarkOutSoldSeats) {
                             e.Graphics.DrawLine(redPen, seatArea.Left, seatArea.Top, seatArea.Right, seatArea.Bottom);
                             e.Graphics.DrawLine(redPen, seatArea.Right, seatArea.Top, seatArea.Left, seatArea.Bottom);

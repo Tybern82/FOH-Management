@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +13,11 @@ using FOHBackend;
 namespace FOHManagerUI {
     public partial class SettingsWindow : Form {
 
-        Settingsv2 localSettings;
+        public Settingsv3 localSettings { get; private set; }
 
-        public SettingsWindow() {
+        public SettingsWindow(Settingsv3 baseSettings) {
             InitializeComponent();
-            localSettings = Settingsv2.Active.copy();
+            localSettings = baseSettings.copy();
 
             txtTryBookingUName.Text = localSettings.TryBooking.Username;
             txtTryBookingPassword.Text = localSettings.TryBooking.Password;
@@ -31,6 +32,14 @@ namespace FOHManagerUI {
             txtSenderName.Text = localSettings.SenderAddress.Name;
             txtSenderEMail.Text = localSettings.SenderAddress.EMail;
             if (String.IsNullOrWhiteSpace(txtSenderEMail.Text)) txtSenderEMail.Text = txtSMTPUName.Text;
+
+            DirectoryInfo appDir = SettingsLoader.SettingsFolder;
+            foreach (FileInfo f in appDir.EnumerateFiles("*.dlp")) {
+                cmbPrintModel.Items.Add(Path.GetFileNameWithoutExtension(f.Name));
+            }
+            string model = localSettings.DLPConfig;
+            if (String.IsNullOrEmpty(model)) model = "default";
+            if (cmbPrintModel.Items.Contains(model)) cmbPrintModel.SelectedItem = model;
         }
 
         private void bCancel_Click(Object sender, EventArgs e) {
@@ -40,14 +49,17 @@ namespace FOHManagerUI {
 
         private void bSave_Click(Object sender, EventArgs e) {
             this.DialogResult = DialogResult.OK;
-            Settingsv2.Active.copyFrom(localSettings);
+            this.Close();
+            /*
+            SettingsLoader.Active.copyFrom(localSettings);
             try {
-                Settingsv2.saveSettings();
+                SettingsLoader.saveSettings();
             } catch (Exception) {
                 MessageBox.Show("Error saving settings");
             } finally {
                 this.Close();
             }
+            */
         }
 
         private void txtTryBookingUName_TextChanged(Object sender, EventArgs e) {
@@ -95,6 +107,11 @@ namespace FOHManagerUI {
         private void txtSenderEMail_TextChanged(Object sender, EventArgs e) {
             if (localSettings.SenderAddress.EMail != txtSenderEMail.Text)
                 localSettings.SenderAddress.EMail = txtSenderEMail.Text;
+        }
+
+        private void cmbPrintModel_SelectedIndexChanged(object sender, EventArgs e) {
+            if (localSettings.DLPConfig != (string)cmbPrintModel.SelectedItem)
+                localSettings.DLPConfig = (string)cmbPrintModel.SelectedItem;
         }
     }
 }
