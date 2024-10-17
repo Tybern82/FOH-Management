@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CefSharp;
+using CefSharp.WinForms;
 
 namespace FOHManagerUI {
     static class Program {
@@ -29,7 +30,8 @@ namespace FOHManagerUI {
             Application.SetCompatibleTextRenderingDefault(false);
 
             //For Windows 7 and above, best to include relevant app.manifest entries as well
-            Cef.EnableHighDPISupport();
+            // Now enabled by default - removed
+            // Cef.EnableHighDPISupport();
 
             //We're going to manually call Cef.Shutdown below, this maybe required in some complex scenarious
             CefSharpSettings.ShutdownOnExit = false;

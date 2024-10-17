@@ -1,15 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FOHBackend", "FOHBackend\FOHBackend.csproj", "{86259894-E245-4B05-B4D6-1D8B642A62ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FOHManagementUI", "FOHManagementUI\FOHManagementUI.csproj", "{FD61E499-278B-43E2-8BEB-A4C47EDF218E}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FOHManagementInstall-x86", "FOHManagementInstall\FOHManagementInstall.vdproj", "{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FOHManagementInstall-x64", "FOHManagementInstall-x64\FOHManagementInstall-x64.vdproj", "{989E0FC1-DDEC-40B2-BF94-769E5783977E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,20 +42,6 @@ Global
 		{FD61E499-278B-43E2-8BEB-A4C47EDF218E}.Release|x64.Build.0 = Release|x64
 		{FD61E499-278B-43E2-8BEB-A4C47EDF218E}.Release|x86.ActiveCfg = Release|x86
 		{FD61E499-278B-43E2-8BEB-A4C47EDF218E}.Release|x86.Build.0 = Release|x86
-		{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}.Debug|Any CPU.ActiveCfg = Debug
-		{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}.Debug|x64.ActiveCfg = Debug
-		{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}.Debug|x86.ActiveCfg = Debug
-		{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}.Release|Any CPU.ActiveCfg = Release
-		{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}.Release|x64.ActiveCfg = Release
-		{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}.Release|x86.ActiveCfg = Release
-		{5ED63B9B-00F7-4BE5-A95C-E9E4F4EE276E}.Release|x86.Build.0 = Release
-		{989E0FC1-DDEC-40B2-BF94-769E5783977E}.Debug|Any CPU.ActiveCfg = Debug
-		{989E0FC1-DDEC-40B2-BF94-769E5783977E}.Debug|x64.ActiveCfg = Debug
-		{989E0FC1-DDEC-40B2-BF94-769E5783977E}.Debug|x86.ActiveCfg = Debug
-		{989E0FC1-DDEC-40B2-BF94-769E5783977E}.Release|Any CPU.ActiveCfg = Release
-		{989E0FC1-DDEC-40B2-BF94-769E5783977E}.Release|x64.ActiveCfg = Release
-		{989E0FC1-DDEC-40B2-BF94-769E5783977E}.Release|x64.Build.0 = Release
-		{989E0FC1-DDEC-40B2-BF94-769E5783977E}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

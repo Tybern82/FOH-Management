@@ -11,7 +11,11 @@ namespace FOHManagerUI {
 
         public event EventHandler<DownloadItem> OnDownloadUpdatedFired;
 
-        public void OnBeforeDownload(IBrowser browser, DownloadItem downloadItem, IBeforeDownloadCallback callback) {
+        public bool CanDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, string url, string requestMethod) {
+            return true;
+        }
+
+        public bool OnBeforeDownload(IWebBrowser webBrowser, IBrowser browser, DownloadItem downloadItem, IBeforeDownloadCallback callback) {
             OnBeforeDownloadFired?.Invoke(this, downloadItem);
 
             if (!callback.IsDisposed) {
@@ -20,10 +24,13 @@ namespace FOHManagerUI {
                     callback.Continue(downloadItem.SuggestedFileName, showDialog: !MainWindow.doPrintAuto);
                 }
             }
+            return true;
         }
 
-        public void OnDownloadUpdated(IBrowser browser, DownloadItem downloadItem, IDownloadItemCallback callback) {
+        public void OnDownloadUpdated(IWebBrowser webBrowser, IBrowser browser, DownloadItem downloadItem, IDownloadItemCallback callback) {
             OnDownloadUpdatedFired?.Invoke(this, downloadItem);
         }
+
+        
     }
 }
