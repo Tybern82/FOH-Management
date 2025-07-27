@@ -265,10 +265,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CefSharp.WinForms">
-      <Version>129.0.110</Version>
-    </PackageReference>
-    <PackageReference Include="MailKit">
-      <Version>4.8.0</Version>
+      <Version>138.0.170</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
